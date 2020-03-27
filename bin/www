@@ -8,11 +8,13 @@ var app = require('../app');
 var debug = require('debug')('visualisation-cas-covid-19:server');
 var http = require('http');
 
+const common = require('../common.js');
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || common.serverConfig.port);
 app.set('port', port);
 
 /**
@@ -86,5 +88,8 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+
+  let listeningOnMsg = 'Listening on ' + bind
+  debug(listeningOnMsg);
+  console.log(listeningOnMsg);
 }
