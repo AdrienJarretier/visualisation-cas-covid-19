@@ -9,7 +9,6 @@ const common = require('../common.js');
 // ------------------------------------------------------ CONFIG
 
 const api_config = common.serverConfig.api;
-const api_entry_point = api_config.entry_point;
 const api_methods = api_config.methods;
 
 // ------------------------------------------------------ CORE
@@ -31,7 +30,7 @@ function get_all_methods_description() {
 
 // ------------------ MAIN ENTRY POINT (methods descs)
 
-router.get(api_entry_point, function(req, res, next) {
+router.get('/', function(req, res, next) {
     res.json(get_all_methods_description())
 });
 
@@ -54,7 +53,7 @@ for (let method_name in api_methods) {
     }
 
     // -- final route data
-    let url_template = api_entry_point + method_name + '/' + url_args.map(arg_name => ':'+arg_name).join('/')
+    let url_template = method_name + '/' + url_args.map(arg_name => ':'+arg_name).join('/')
     let dataManager_method = full_method_config.method
 
     // -- routing
