@@ -32,7 +32,7 @@ function transfer_to_key(rows, transfer_key) {
 
 // ------------------ SQL DB CALLER
 
-async function select_db(sql) {
+function select_db(sql) {
     return new Promise(resolve => {
         db.all(sql, function(err, rows) {
             resolve(rows);
