@@ -17,7 +17,14 @@ const api_methods = api_config.methods;
 // ------------------ METHODS DESC
 
 function get_all_methods_description() {
-    return api_methods
+    let methods_descriptor = {}
+    for(let method_name in api_methods) {
+        let full_method_config = api_methods[method_name]
+        let args_config = full_method_config.args
+        let args = Object.keys(args_config).filter(arg_name => args_config[arg_name].includes('@'))
+        methods_descriptor[method_name] = args
+    }
+    return methods_descriptor
 }
 
 // ------------------------------------------------------ ROUTING
