@@ -4,10 +4,9 @@ Requirements :
 Nodejs 12 : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
 ```bash
-( set -x
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
-npm install )
+npm install
 ```
 
 Then start the web sever with `npm start`

@@ -1,6 +1,22 @@
 {
+    "port": 3000,
     "dataUri": "https://opendata.ecdc.europa.eu/covid19/casedistribution/json",
     "db": {
         "database": "db/covid19cases.db"
+    },
+    "api": {
+        "entry_point": "/api",
+        "methods": {
+            "/countries": {
+                "method": "get_all_countries",
+                "args": {}
+            },
+            "/cases": {
+                "method": "get_data_by_geoid",
+                "args": {
+                    "geoid": "@url"
+                }
+            }
+        }
     }
 }
