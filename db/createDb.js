@@ -12,8 +12,12 @@ let db = new sqlite3.Database(config.db.database);
 db.on('trace', (sql) => { console.log(sql); });
 
 Promise.all([createTables()]).then(() => {
-    db.close();
-    console.log('closing db');
+    db.close(() => {
+
+        console.log('db closed');
+        console.log('db ' + config.db.database + ' created');
+
+    });
 });
 
 function createTables() {

@@ -51,17 +51,20 @@ function addCountry(countryGeoId, name) {
 
     let db = new sqlite3.Database(common.serverConfig.db.database);
 
-
     let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
 
     stmt.on('error', (err) => {
 
-        db.close();
+
     });
     stmt.run(countryGeoId, name);
     stmt.finalize();
 
-    db.close();
+    db.close(() => {
+
+        console.log('country ' + countryGeoId + ', ' + name + ' added');
+
+    });
 }
 
 async function fillCasesByCountry(countryGeoId) {
@@ -70,10 +73,10 @@ async function fillCasesByCountry(countryGeoId) {
 
     let countryRecords = await getByCountry(countryGeoId);
 
-    console.log(countryRecords);
-    console.log(countryRecords.length);
-
     let db = new sqlite3.Database(common.serverConfig.db.database);
+
+
+    console.log(' - filling cases for country ' + countryGeoId);
 
     db.serialize(function () {
 
@@ -91,6 +94,8 @@ async function fillCasesByCountry(countryGeoId) {
 
     db.close();
 }
+
+
 
 addCountry('FR', 'France');
 fillCasesByCountry('FR');
