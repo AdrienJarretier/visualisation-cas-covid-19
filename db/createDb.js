@@ -12,8 +12,12 @@ let db = new sqlite3.Database(config.db.database);
 db.on('trace', (sql) => { console.log(sql); });
 
 Promise.all([createTables()]).then(() => {
-    db.close();
-    console.log('closing db');
+    db.close(() => {
+
+        console.log('db closed');
+        console.log('db ' + config.db.database + ' created');
+
+    });
 });
 
 function createTables() {
@@ -30,7 +34,8 @@ function createTables() {
                 "date" DATE NOT NULL,
                 "cases" INTEGER NOT NULL,
                 "deaths" INTEGER NOT NULL,
-                FOREIGN KEY(country) REFERENCES countries(geoid)
+                FOREIGN KEY(country) REFERENCES countries(geoid),
+                UNIQUE (country, date)
               );`);
 
     });

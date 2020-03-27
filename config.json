@@ -1,4 +1,5 @@
 {
+    "port": 3000,
     "dataUri": "https://opendata.ecdc.europa.eu/covid19/casedistribution/json",
     "db": {
         "database": "db/covid19cases.db"
