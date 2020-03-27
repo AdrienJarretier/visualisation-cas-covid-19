@@ -2,7 +2,7 @@
 
 $(function (){
 // set the dimensions of the canvas
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
+var margin = {top: 20, right: 80, bottom: 70, left: 40},
     width = 600 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
@@ -56,7 +56,7 @@ var data = JSON.parse(`[
     },
     {
         "Date" : "F",
-        "Cases" : 21
+        "Cases" : 21 
     },
     {
         "Date" : "G",
@@ -98,11 +98,18 @@ svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
+.append("text")
+    .attr("y", 0)
+    .attr("x", width+40)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Time")
 .selectAll("text")
     .style("text-anchor", "end")
     .attr("dx", "-.8em")
     .attr("dy", "-.55em")
-    .attr("transform", "rotate(-90)" );
+    .attr("transform", "rotate(-80)" );
+
 
 svg.append("g")
     .attr("class", "y axis")

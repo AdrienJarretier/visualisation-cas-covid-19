@@ -9,11 +9,11 @@ a {
 
 
 .bar{
-  fill: steelblue;
+  fill: rgb(195, 203, 209);
 }
 
 .bar:hover{
-  fill: brown;
+  fill: rgb(76, 49, 107);
 }
 
 .axis {
