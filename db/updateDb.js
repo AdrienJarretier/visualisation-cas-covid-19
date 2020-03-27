@@ -2,6 +2,8 @@ const superagent = require('superagent');
 
 const common = require('../common.js');
 
+const sqlite3 = require('sqlite3').verbose();
+
 async function downloadData() {
 
     // let uri = common.serverConfig.dataUri;
@@ -47,11 +49,33 @@ async function getByCountry(countryGeoId) {
 
 async function fillCasesByCountry(countryGeoId) {
 
+
     let countryRecords = await getByCountry(countryGeoId);
 
     console.log(countryRecords);
     console.log(countryRecords.length);
 
+    let db = new sqlite3.Database(common.serverConfig.db.database);
+
+    let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
+    stmt.run('FR', 'France');
+    stmt.finalize();
+
+    db.serialize(function () {
+
+        let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
+
+        for (let i = 1; i < dataArray.length; ++i) {
+
+            let geoShape = JSON.parse(dataArray[i][1]);
+            stmt.run(geoShape.coordinates[0], geoShape.coordinates[1], dataArray[i][2], dataArray[i][3], dataArray[i][4]);
+
+        }
+        stmt.finalize();
+
+    });
+
+    db.close();
 }
 
 fillCasesByCountry('fr');
