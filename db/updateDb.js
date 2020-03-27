@@ -49,20 +49,26 @@ async function getByCountry(countryGeoId) {
 
 function addCountry(countryGeoId, name) {
 
-    let db = new sqlite3.Database(common.serverConfig.db.database);
+    return new Promise((resolve, reject) => {
 
-    let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
+        let db = new sqlite3.Database(common.serverConfig.db.database);
 
-    stmt.on('error', (err) => {
+        let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
+
+        stmt.on('error', (err) => {
 
 
-    });
-    stmt.run(countryGeoId, name);
-    stmt.finalize();
+        });
+        stmt.run(countryGeoId, name);
+        stmt.finalize();
 
-    db.close(() => {
+        db.close(() => {
 
-        console.log('country ' + countryGeoId + ', ' + name + ' added');
+            console.log('country ' + countryGeoId + ', ' + name + ' added');
+
+            resolve();
+
+        });
 
     });
 }
@@ -97,5 +103,7 @@ async function fillCasesByCountry(countryGeoId) {
 
 
 
-addCountry('FR', 'France');
-fillCasesByCountry('FR');
+addCountry('FR', 'France')
+    .then(() => {
+        fillCasesByCountry('FR');
+    });
