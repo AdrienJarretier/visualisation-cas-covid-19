@@ -34,7 +34,8 @@ function createTables() {
                 "date" DATE NOT NULL,
                 "cases" INTEGER NOT NULL,
                 "deaths" INTEGER NOT NULL,
-                FOREIGN KEY(country) REFERENCES countries(geoid)
+                FOREIGN KEY(country) REFERENCES countries(geoid),
+                UNIQUE (country, date)
               );`);
 
     });

@@ -88,10 +88,21 @@ async function fillCasesByCountry(countryGeoId) {
 
         let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
 
+        stmt.on('error', (err) => {
+
+
+        });
+
         for (let record of countryRecords) {
 
+            let year = record.year;
+            let month = parseInt(record.month) - 1;
+            let day = record.day;
 
-            stmt.run(countryGeoId, record.dateRep, record.cases, record.deaths);
+            let date = (new Date(Date.UTC(year, month, day))).toJSON();
+
+
+            stmt.run(countryGeoId, date, record.cases, record.deaths);
 
         }
         stmt.finalize();
@@ -107,3 +118,4 @@ addCountry('FR', 'France')
     .then(() => {
         fillCasesByCountry('FR');
     });
+
