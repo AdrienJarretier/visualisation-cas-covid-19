@@ -8,8 +8,8 @@ var margin = {top: 20, right: 80, bottom: 70, left: 40},
 
 
 // set the ranges
-var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
-var y = d3.scale.linear().range([height, 0]);
+var x = d3.scaleTime();
+var y = d3.scaleLinear().range([height, 0]);
 
 
 var xAxis = d3.svg.axis()
@@ -35,62 +35,50 @@ var svg = d3.select("body").append("svg")
 
 var data = JSON.parse(`[
     {
-        "Date": "A",
-        "Cases": 20	
+        "Date": "2020-03-22T00:00:00.000Z",
+        "Cases": 2	,
+        "CumulCases":2
     },
     {
-        "Date" : "B",
-        "Cases": 12
+        "Date" : "2020-03-23T00:00:00.000Z",
+        "Cases": 6,
+        "CumulCases":8
     },
     {
-        "Date" : "C",
-        "Cases": 47
+        "Date" : "2020-03-24T00:00:00.000Z",
+        "Cases": 8,
+        "CumulCases":14
     },
     {
-        "Date" : "D",
-        "Cases": 34
+        "Date" : "2020-03-25T00:00:00.000Z",
+        "Cases": 16,
+        "CumulCases":24
     },
     {
-        "Date" : "E",
-        "Cases" : 54
+        "Date" : "2020-03-26T00:00:00.000Z",
+        "Cases" : 30,
+        "CumulCases":46
     },
     {
-        "Date" : "F",
-        "Cases" : 21 
-    },
-    {
-        "Date" : "G",
-        "Cases" : 57
-    },
-    {
-        "Date" : "H",
-        "Cases" : 31
-    },
-    {
-        "Date" : "I",
-        "Cases" : 17
-    },
-    {
-        "Date" : "J",
-        "Cases" : 5
-    },
-    {
-        "Date" : "K",
-        "Cases" : 23
+        "Date" : "2020-03-27T00:00:00.000Z",
+        "Cases" : 60,
+        "CumulCases":106 
     }
 ]`);
+
+//var parseDate = d3.timeParse("%Y-%m-%d");
 
 
 // load the data
 console.log(data)
 
 data.forEach(function(d) {
-    d.Date = d.Date;
+    d.Date = new Date(d.Date);
     d.Cases = +d.Cases;
 });
 
 // scale the range of the data
-x.domain(data.map(function(d) { return d.Date; }));
+x.range([0, width], .05).domain(d3.extent(data, function(d) { return d.Date; }));
 y.domain([0, d3.max(data, function(d) { return d.Cases; })]);
 
 // add axis
