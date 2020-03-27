@@ -3,8 +3,8 @@
 $(function (){
 // set the dimensions of the canvas
 var margin = {top: 20, right: 80, bottom: 70, left: 40},
-    width = 600 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+    width = 1200 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
 
 
 // set the ranges
