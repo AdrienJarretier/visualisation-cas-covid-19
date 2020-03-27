@@ -47,8 +47,26 @@ async function getByCountry(countryGeoId) {
 
 }
 
+function addCountry(countryGeoId, name) {
+
+    let db = new sqlite3.Database(common.serverConfig.db.database);
+
+
+    let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
+
+    stmt.on('error', (err) => {
+
+        db.close();
+    });
+    stmt.run(countryGeoId, name);
+    stmt.finalize();
+
+    db.close();
+}
+
 async function fillCasesByCountry(countryGeoId) {
 
+    countryGeoId = countryGeoId.toUpperCase();
 
     let countryRecords = await getByCountry(countryGeoId);
 
@@ -57,18 +75,14 @@ async function fillCasesByCountry(countryGeoId) {
 
     let db = new sqlite3.Database(common.serverConfig.db.database);
 
-    let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
-    stmt.run('FR', 'France');
-    stmt.finalize();
-
     db.serialize(function () {
 
         let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
 
-        for (let i = 1; i < dataArray.length; ++i) {
+        for (let record of countryRecords) {
 
-            let geoShape = JSON.parse(dataArray[i][1]);
-            stmt.run(geoShape.coordinates[0], geoShape.coordinates[1], dataArray[i][2], dataArray[i][3], dataArray[i][4]);
+
+            stmt.run(countryGeoId, record.dateRep, record.cases, record.deaths);
 
         }
         stmt.finalize();
@@ -78,4 +92,5 @@ async function fillCasesByCountry(countryGeoId) {
     db.close();
 }
 
-fillCasesByCountry('fr');
+addCountry('FR', 'France');
+fillCasesByCountry('FR');
