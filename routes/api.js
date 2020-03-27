@@ -47,16 +47,16 @@ for (let method_name in api_methods) {
     }
 
     // -- final route data
-    let full_url = api_entry_point + method_name + '/' + url_args.map(arg_name => ':'+arg_name).join('/')
+    let url_template = api_entry_point + method_name + '/' + url_args.map(arg_name => ':'+arg_name).join('/')
     let dataManager_method = full_method_config.method
 
     // -- routing
-    router.get(full_url, async function(req, res, next) {
+    router.get(url_template, async function(req, res, next) {
 
         // -- retrieving args value
         let calling_args = []
-        for(let arg_name in url_args) {
-            let arg_value = url_args[arg_name]
+        for(let arg_name of url_args) {
+            let arg_value = req.params[arg_name]
             calling_args.push(arg_value)
         }
 
