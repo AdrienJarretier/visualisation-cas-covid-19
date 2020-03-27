@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var common = require('./common');
 
+var favicon = require('serve-favicon');
+
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 
@@ -19,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(favicon(path.join(__dirname,'public','images','favicon.svg')));
 
 app.use('/', indexRouter);
 app.use(common.serverConfig.api.entry_point, apiRouter);
