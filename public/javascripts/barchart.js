@@ -12,13 +12,9 @@ var x = d3.scaleTime();
 var y = d3.scaleLinear().range([height, 0]);
 
 
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .ticks(10);
+var xAxis = d3.axisBottom(x)
+
+var yAxis = d3.axisLeft(y).ticks(10);
 
 
 // add the SVG element
@@ -34,6 +30,11 @@ var svg = d3.select("body").append("svg")
 
 
 var data = JSON.parse(`[
+    {
+        "Date": "2020-03-18T00:00:00.000Z",
+        "Cases": 1	,
+        "CumulCases":0
+    },
     {
         "Date": "2020-03-22T00:00:00.000Z",
         "Cases": 2	,
@@ -81,6 +82,9 @@ data.forEach(function(d) {
 x.range([0, width], .05).domain(d3.extent(data, function(d) { return d.Date; }));
 y.domain([0, d3.max(data, function(d) { return d.Cases; })]);
 
+
+
+dateMin = d3.min(data, function(d) {return d.Cases;})
 // add axis
 svg.append("g")
     .attr("class", "x axis")
@@ -116,7 +120,7 @@ svg.selectAll("bar")
 .enter().append("rect")
     .attr("class", "bar")
     .attr("x", function(d) { return x(d.Date); })
-    .attr("width", x.rangeBand())
+    .attr("width", width/data.length-20)
     .attr("y", function(d) { return y(d.Cases); })
     .attr("height", function(d) { return height - y(d.Cases); });
 });
