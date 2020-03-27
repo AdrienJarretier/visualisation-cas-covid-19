@@ -11,9 +11,22 @@ let db = new sqlite3.Database(common.serverConfig.db.database);
 // ------------------ TRANSFORMERS METHODS
 
 function remove_props_inplace(obj, props_to_remove) {
-    for(let id in obj) {
-        for(let prop of props_to_remove) {
-            delete obj[id][prop]
+
+    // -- Array management
+    if (Array.isArray(obj)) {
+        for(let item of obj) {
+            for(let prop of props_to_remove) {
+                delete item[prop]
+            }
+        }
+    } 
+
+    // -- Object management
+    else {
+        for(let id in obj) {
+            for(let prop of props_to_remove) {
+                delete obj[id][prop]
+            }
         }
     }
 }
@@ -97,11 +110,10 @@ async function get_data_by_geoid(geoid) {
 
     })
 
-    let final_data = transfer_to_key(geodata, 'date');
-    let props_to_remove = ['date', 'country'];
-    remove_props_inplace(final_data, props_to_remove);
+    let props_to_remove = ['country'];
+    remove_props_inplace(geodata, props_to_remove);
 
-    return final_data;
+    return geodata;
 }
 
 // ------------------ GET ALL COUNTRIES
