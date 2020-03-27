@@ -69,22 +69,25 @@ var data = JSON.parse(`[
 
 //var parseDate = d3.timeParse("%Y-%m-%d");
 
-
 // load the data
-console.log(data)
+
+async function drawBarchart (){
+
+    var data = await d3.json("api/cases/FR");
+
+    console.log(data);
 
 data.forEach(function(d) {
-    d.Date = new Date(d.Date);
-    d.Cases = +d.Cases;
+    d.date = new Date(d.date);
 });
 
 // scale the range of the data
-x.range([0, width], .05).domain(d3.extent(data, function(d) { return d.Date; }));
-y.domain([0, d3.max(data, function(d) { return d.Cases; })]);
+x.range([0, width], .05).domain(d3.extent(data, function(d) { return d.date; }));
+y.domain([0, d3.max(data, function(d) { return d.cases; })]);
 
 
 
-dateMin = d3.min(data, function(d) {return d.Cases;})
+dateMin = d3.min(data, function(d) {return d.cases;})
 // add axis
 svg.append("g")
     .attr("class", "x axis")
@@ -119,8 +122,24 @@ svg.selectAll("bar")
     .data(data)
 .enter().append("rect")
     .attr("class", "bar")
-    .attr("x", function(d) { return x(d.Date); })
-    .attr("width", width/data.length-20)
-    .attr("y", function(d) { return y(d.Cases); })
-    .attr("height", function(d) { return height - y(d.Cases); });
+    .attr("x", function(d) { return x(d.date); })
+    .attr("width", width/data.length)
+    .attr("y", function(d) { return y(d.cases); })
+    .attr("height", function(d) { return height - y(d.cases); });
+}
+drawBarchart();
+
+
+
+
+
+
+
+
+
+
 });
+
+
+
+
