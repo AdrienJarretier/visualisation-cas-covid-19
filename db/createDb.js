@@ -25,7 +25,7 @@ function createTables() {
             "name" TEXT
             );`);
 
-        db.run(`CREATE TABLE IF NOT EXIST "cases" (
+        db.run(`CREATE TABLE IF NOT EXISTS "cases" (
                 "country" CHARACTER(2),
                 "date" DATE NOT NULL,
                 "cases" INTEGER NOT NULL,
