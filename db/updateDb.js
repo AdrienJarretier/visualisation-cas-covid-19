@@ -6,8 +6,8 @@ const sqlite3 = require('sqlite3').verbose();
 
 async function downloadData() {
 
-    // let uri = common.serverConfig.dataUri;
-    let uri = '127.0.0.1:' + common.serverConfig.port + '/testjson.json';
+    let uri = common.serverConfig.dataUri;
+    // let uri = '127.0.0.1:' + common.serverConfig.port + '/testjson.json';
 
     try {
 
