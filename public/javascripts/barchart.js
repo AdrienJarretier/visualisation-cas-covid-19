@@ -37,6 +37,11 @@ $(function () {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+    var formatTime = d3.timeFormat("%e %B");
+    // Define the div for the tooltip
+    var div = d3.select("body").append("div")	
+        .attr("class", "tooltip")				
+        .style("opacity", 0);
 
     // ajax request to GET the data 
 
@@ -94,7 +99,20 @@ $(function () {
             .attr("x", function (d) { return x(d.date); })
             .attr("width", width / data.length)
             .attr("y", function (d) { return y(d.cases); })
-            .attr("height", function (d) { return height - y(d.cases); });
+            .attr("height", function (d) { return height - y(d.cases); })
+            .on("mouseover", function(d) {		
+                div.transition()		
+                    .duration(200)		
+                    .style("opacity", .9);		
+                div	.html(formatTime(d.date) + "<br/>"  + d.cases+ " cases")	
+                    .style("left", (d3.event.pageX + 5) + "px")		
+                    .style("top", (d3.event.pageY - 28) + "px");	
+                })					
+            .on("mouseout", function(d) {		
+                div.transition()		
+                    .duration(500)		
+                    .style("opacity", 0);	
+            });
 
 
         document.getElementsByTagName('input')
