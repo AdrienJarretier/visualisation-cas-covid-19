@@ -83,18 +83,35 @@ $(function () {
             .attr("width", width / data.length)
             .attr("y", function (d) { return y(d.cases); })
             .attr("height", function (d) { return height - y(d.cases); });
+
+
+
+        d3.select("#logCheckbox").on("click", function() {
+            if(this.checked) {
+                y = d3.scaleLog()
+                    .domain([0, d3.max(data, function (d) { return d.cases; })])
+                    .range([height, 0]);
+            } else {
+                y = d3.scaleLinear()
+                    .domain([0, d3.max(data, function (d) { return d.cases; })])
+                    .range([height, 0]);
+            }
+
+            yAxis.scale(y);
+            
+            d3.select("g.axis.y")
+                .transition()
+                .duration(500)
+                .call(yAxis);
+            
+            d3.selectAll("rect")
+                .transition()
+                .delay(400)
+                .duration(600)
+                .attr("height", function (d) { console.log(y(d.cases)); return height - y(d.cases); })
+            })
     }
     drawBarchart();
-
-
-
-
-
-
-
-
-
-
 });
 
 
