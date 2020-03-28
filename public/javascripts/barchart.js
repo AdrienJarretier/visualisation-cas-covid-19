@@ -1,6 +1,18 @@
 
 
 $(function () {
+
+
+
+    var checkboxes = document.getElementsByTagName('input');
+
+    for (var i=0; i<checkboxes.length; i++)  {
+        if (checkboxes[i].type == 'checkbox')   {
+            checkboxes[i].checked = false;
+        }
+    }
+
+
     // set the dimensions of the canvas
     var margin = { top: 20, right: 80, bottom: 70, left: 40 },
         width = 1200 - margin.left - margin.right,
@@ -85,11 +97,11 @@ $(function () {
             .attr("height", function (d) { return height - y(d.cases); });
 
 
-
+        document.getElementsByTagName('input')
         d3.select("#logCheckbox").on("click", function() {
             if(this.checked) {
                 y = d3.scaleLog()
-                    .domain([0, d3.max(data, function (d) { return d.cases; })])
+                    .domain([1, d3.max(data, function (d) { return d.cases; })])
                     .range([height, 0]);
             } else {
                 y = d3.scaleLinear()
@@ -108,7 +120,10 @@ $(function () {
                 .transition()
                 .delay(400)
                 .duration(600)
-                .attr("height", function (d) { console.log(y(d.cases)); return height - y(d.cases); })
+                .attr("y", function (d) { if(d.cases==0){return y(d.cases+1);}
+                else{return y(d.cases)}})
+                .attr("height", function (d) { if(d.cases==0){return height - y(d.cases+1);}
+                else{return height - y(d.cases)}})
             })
     }
     drawBarchart();
