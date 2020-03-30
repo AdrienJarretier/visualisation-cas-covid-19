@@ -114,8 +114,9 @@ async function fillCasesByCountry(countryGeoId) {
 
 
 
-addCountry('FR', 'France')
-    .then(() => {
-        fillCasesByCountry('FR');
-    });
+// addCountry('FR', 'France')
+//     .then(() => {
+//         fillCasesByCountry('FR');
+//     });
 
+exports.fillCasesByCountry = fillCasesByCountry;
