@@ -1,35 +1,12 @@
-const superagent = require('superagent');
-
 const common = require('../common.js');
 
 const sqlite3 = require('sqlite3').verbose();
 
-async function downloadData() {
 
-    let uri = common.serverConfig.dataUri;
-    // let uri = '127.0.0.1:' + common.serverConfig.port + '/testjson.json';
-
-    try {
-
-        console.log('getting ' + uri);
-
-        const res = await superagent.get(uri);
-
-        return res.body.records;
-
-    } catch (err) {
-
-        console.error("error when getting " + uri);
-        console.error(err);
-
-    }
-
-
-}
 
 async function getByCountry(countryGeoId) {
 
-    let records = await downloadData();
+    let records = await common.downloadData();
 
     let countryRecords = [];
 
@@ -109,13 +86,18 @@ async function fillCasesByCountry(countryGeoId) {
 
     });
 
-    db.close();
+    db.close(() => {
+
+        console.log('cases for country ' + countryGeoId + ' added');
+
+    });
 }
 
 
 
-addCountry('FR', 'France')
-    .then(() => {
-        fillCasesByCountry('FR');
-    });
+// addCountry('FR', 'France')
+//     .then(() => {
+//         fillCasesByCountry('FR');
+//     });
 
+exports.fillCasesByCountry = fillCasesByCountry;
