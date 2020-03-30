@@ -1,10 +1,15 @@
 
 
+function formatDate(date) {
+
+    return (date).toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
+
+}
+
 $(function () {
 
 
     $('#tooltip').hide();
-
 
     function generateGetBoundingClientRect(x = 0, y = 0) {
         return () => ({
@@ -47,13 +52,13 @@ $(function () {
 
 
     // set the ranges
-    var x = d3.scaleTime();
+    var x = d3.scaleTime().range([0, width], .05);
     var y = d3.scaleLinear().range([height, 0]);
 
 
-    var xAxis = d3.axisBottom(x)
+    var xAxis = d3.axisBottom(x).tickFormat((d, i) => formatDate(d));
 
-    var yAxis = d3.axisLeft(y).ticks(10).tickFormat(d3.format("~s"));
+    var yAxis = d3.axisLeft(y).ticks(10).tickFormat((d, i) => (d).toLocaleString());
 
 
     // add the SVG element
@@ -64,7 +69,8 @@ $(function () {
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-    var formatTime = d3.timeFormat("%e %B");
+
+
     // Define the div for the tooltip
     var div = d3.select("body").append("div")
         .attr("class", "tooltip")
@@ -76,14 +82,12 @@ $(function () {
 
         var data = await d3.json("api/cases/FR");
 
-        console.log(data);
-
         data.forEach(function (d) {
             d.date = new Date(d.date);
         });
 
         // scale the range of the data
-        x.range([0, width], .05).domain(d3.extent(data, function (d) { return d.date; }));
+        x.domain(d3.extent(data, function (d) { return d.date; }));
         y.domain([0, d3.max(data, function (d) { return d.cases; })]);
 
 
@@ -139,23 +143,23 @@ $(function () {
                 $('#tooltip').show();
 
 
-                $('#tooltip').html(formatTime(d.date) + "<br>" + d.cases + " cases");
+                $('#tooltip').html(formatDate(d.date) + "<br>" + d.cases + " nouveaux cas");
 
 
             });
 
         svg.append("text")
             .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left-5)
-            .attr("x",0 - (height / 2))
+            .attr("y", 0 - margin.left - 5)
+            .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Nombre de cas");      
+            .text("Nombre de cas");
 
-        svg.append("text")             
+        svg.append("text")
             .attr("transform",
-                  "translate(" + (width/2) + " ," + 
-                                 (height + margin.top + 20) + ")")
+                "translate(" + (width / 2) + " ," +
+                (height + margin.top + 20) + ")")
             .style("text-anchor", "middle")
             .text("Date");
 
@@ -170,7 +174,7 @@ $(function () {
                     .range([height, 0]);
             }
 
-            yAxis.scale(y).tickFormat(d3.format("~s"));
+            yAxis.scale(y);
 
             d3.select("g.axis.y")
                 .transition()
