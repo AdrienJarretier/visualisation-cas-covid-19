@@ -46,7 +46,7 @@ $(function () {
 
 
     // set the dimensions of the canvas
-    var margin = { top: 20, right: 80, bottom: 70, left: 40 },
+    var margin = { top: 20, right: 80, bottom: 90, left: 80 },
         width = 1200 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom;
 
@@ -148,19 +148,20 @@ $(function () {
 
             });
 
+        // axis titles
         svg.append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", 0 - margin.left - 5)
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text("Nombre de cas");
+            .attr("class", "axisTitle")
+            .text("Nombre de nouveaux cas");
 
         svg.append("text")
             .attr("transform",
                 "translate(" + (width / 2) + " ," +
-                (height + margin.top + 20) + ")")
-            .style("text-anchor", "middle")
+                (height + margin.bottom - 30) + ")")
+            .attr("class", "axisTitle")
             .text("Date");
 
         d3.select("#logCheckbox").on("click", function () {

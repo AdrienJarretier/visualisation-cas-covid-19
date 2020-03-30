@@ -49,3 +49,9 @@ div.tooltip {
   border-radius: 4px;
   font-size: 13px;
 }
+
+.axisTitle {
+  font-size: 20px;
+  letter-spacing:0.1em;
+  text-anchor: middle;
+}
