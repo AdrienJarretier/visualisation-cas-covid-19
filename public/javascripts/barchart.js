@@ -4,13 +4,12 @@ $(function () {
 
 
 
-    var checkboxes = document.getElementsByTagName('input');
-
-    for (var i=0; i<checkboxes.length; i++)  {
-        if (checkboxes[i].type == 'checkbox')   {
-            checkboxes[i].checked = false;
-        }
-    }
+    // var checkboxes = document.getElementsByTagName('input');
+    // for (var i=0; i<checkboxes.length; i++)  {
+    //     if (checkboxes[i].type == 'checkbox')   {
+    //         checkboxes[i].checked = false;
+    //     }
+    // }
 
 
     // set the dimensions of the canvas
@@ -115,7 +114,7 @@ $(function () {
             });
 
 
-        document.getElementsByTagName('input')
+        
         d3.select("#logCheckbox").on("click", function() {
             if(this.checked) {
                 y = d3.scaleLog()
@@ -127,16 +126,16 @@ $(function () {
                     .range([height, 0]);
             }
 
-            yAxis.scale(y);
+            yAxis.scale(y).tickFormat(d3.format("~s"));
             
             d3.select("g.axis.y")
                 .transition()
-                .duration(500)
-                .call(yAxis);
+                .duration(600)
+                .call(yAxis)
             
             d3.selectAll("rect")
                 .transition()
-                .delay(400)
+                .delay(0)
                 .duration(600)
                 .attr("y", function (d) { if(d.cases==0){return y(d.cases+1);}
                 else{return y(d.cases)}})
