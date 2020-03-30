@@ -38,8 +38,8 @@ $(function () {
 
     var formatTime = d3.timeFormat("%e %B");
     // Define the div for the tooltip
-    var div = d3.select("body").append("div")	
-        .attr("class", "tooltip")				
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
         .style("opacity", 0);
 
     // ajax request to GET the data 
@@ -99,24 +99,24 @@ $(function () {
             .attr("width", width / data.length)
             .attr("y", function (d) { return y(d.cases); })
             .attr("height", function (d) { return height - y(d.cases); })
-            .on("mouseover", function(d) {		
-                div.transition()		
-                    .duration(200)		
-                    .style("opacity", .9);		
-                div	.html(formatTime(d.date) + "<br>"  + d.cases+ " cases")	
-                    .style("left", (d3.event.pageX + 5) + "px")		
-                    .style("top", (d3.event.pageY - 28) + "px");	
-                })					
-            .on("mouseout", function(d) {		
-                div.transition()		
-                    .duration(500)		
-                    .style("opacity", 0);	
+            .on("mouseover", function (d) {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                div.html(formatTime(d.date) + "<br>" + d.cases + " cases")
+                    .style("left", (d3.event.pageX + 5) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function (d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
             });
 
 
-        
-        d3.select("#logCheckbox").on("click", function() {
-            if(this.checked) {
+
+        d3.select("#logCheckbox").on("click", function () {
+            if (this.checked) {
                 y = d3.scaleLog()
                     .domain([1, d3.max(data, function (d) { return d.cases; })])
                     .range([height, 0]);
@@ -127,21 +127,25 @@ $(function () {
             }
 
             yAxis.scale(y).tickFormat(d3.format("~s"));
-            
+
             d3.select("g.axis.y")
                 .transition()
                 .duration(600)
                 .call(yAxis)
-            
+
             d3.selectAll("rect")
                 .transition()
                 .delay(0)
                 .duration(600)
-                .attr("y", function (d) { if(d.cases==0){return y(d.cases+1);}
-                else{return y(d.cases)}})
-                .attr("height", function (d) { if(d.cases==0){return height - y(d.cases+1);}
-                else{return height - y(d.cases)}})
-            })
+                .attr("y", function (d) {
+                    if (d.cases == 0) { return y(d.cases + 1); }
+                    else { return y(d.cases) }
+                })
+                .attr("height", function (d) {
+                    if (d.cases == 0) { return height - y(d.cases + 1); }
+                    else { return height - y(d.cases) }
+                })
+        })
     }
     drawBarchart();
 });
