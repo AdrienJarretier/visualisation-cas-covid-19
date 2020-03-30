@@ -114,7 +114,7 @@ $(function () {
             });
 
 
-        document.getElementsByTagName('input')
+        
         d3.select("#logCheckbox").on("click", function() {
             if(this.checked) {
                 y = d3.scaleLog()
@@ -126,12 +126,12 @@ $(function () {
                     .range([height, 0]);
             }
 
-            yAxis.scale(y);
+            yAxis.scale(y).tickFormat(d3.format("~s"));
             
             d3.select("g.axis.y")
                 .transition()
                 .duration(600)
-                .call(yAxis);
+                .call(yAxis)
             
             d3.selectAll("rect")
                 .transition()
