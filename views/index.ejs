@@ -2,24 +2,23 @@
 <html>
 
 <head>
-  <title><%= globalTitle %></title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
-  <script async src="extLibs/jquery-3.4.1.min.js"></script>
-  <script src="extLibs/d3.v5.min.js"></script>
-  <script src="javascripts/barchart.js"></script>
-
   <%-
       include('partials/head.ejs')
     %>
+
+  <script src="javascripts/barchart.js"></script>
 </head>
 
 <body>
   <h1><%= globalTitle %></h1>
 
-  <div class="controls">
-    <input id="logCheckbox" type="checkbox" value="logscale"></input>
-	<label for="logscale">Log scale</label>
+  <div class="custom-control custom-switch">
+
+    <input id="logCheckbox" type="checkbox" class="custom-control-input"></input>
+    <label class="custom-control-label" for="logCheckbox">Log scale</label>
+
   </div>
+
 
 </body>
 
