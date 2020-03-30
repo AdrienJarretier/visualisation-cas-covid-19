@@ -164,8 +164,11 @@ $(function () {
             .attr("class", "axisTitle")
             .text("Date");
 
-        d3.select("#logCheckbox").on("click", function () {
-            if (this.checked) {
+        function changeYaxisScale() {
+
+            let scaleSwitch = $("#logCheckbox")[0];
+
+            if (scaleSwitch.checked) {
                 y = d3.scaleLog()
                     .domain([1, d3.max(data, function (d) { return d.cases; })])
                     .range([height, 0]);
@@ -194,7 +197,15 @@ $(function () {
                     if (d.cases == 0) { return height - y(d.cases + 1); }
                     else { return height - y(d.cases) }
                 })
-        })
+        }
+
+        changeYaxisScale();
+
+        $("#logCheckbox").change(changeYaxisScale);
+
+        // d3.select("#logCheckbox").on("click", changeYaxisScale);
+
+
     }
     drawBarchart();
 });
