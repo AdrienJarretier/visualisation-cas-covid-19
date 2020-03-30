@@ -4,13 +4,12 @@ $(function () {
 
 
 
-    var checkboxes = document.getElementsByTagName('input');
-
-    for (var i=0; i<checkboxes.length; i++)  {
-        if (checkboxes[i].type == 'checkbox')   {
-            checkboxes[i].checked = false;
-        }
-    }
+    // var checkboxes = document.getElementsByTagName('input');
+    // for (var i=0; i<checkboxes.length; i++)  {
+    //     if (checkboxes[i].type == 'checkbox')   {
+    //         checkboxes[i].checked = false;
+    //     }
+    // }
 
 
     // set the dimensions of the canvas
