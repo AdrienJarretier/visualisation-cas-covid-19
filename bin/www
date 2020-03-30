@@ -9,7 +9,7 @@ const db = require('../db/updateDb.js');
 
 var schedule = require('node-schedule');
 
-var j = schedule.scheduleJob({ minute: 35 }, function (fireDate) {
+var j = schedule.scheduleJob({ minute: 5 }, function (fireDate) {
 
 
   console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
