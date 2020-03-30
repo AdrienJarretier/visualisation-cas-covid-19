@@ -9,11 +9,11 @@ a {
 
 
 .bar{
-  fill: rgb(195, 203, 209);
+  fill: rgb(173, 57, 72);
 }
 
 .bar:hover{
-  fill: rgb(76, 49, 107);
+  fill: rgb(216, 158, 168);
 }
 
 .axis {
@@ -25,4 +25,27 @@ a {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+div.tooltip {	
+  position: absolute;			
+  text-align: center;			
+  width: 60px;					
+  height: 44px;					
+  padding: 2px;				
+  font: 12px sans-serif;		
+  background: rgb(216, 210, 212);	
+  border: 0px;		
+  border-radius: 8px;			
+  pointer-events: none;			
+}
+
+
+#tooltip {
+  background-color: #333;
+  color: white;
+  display: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
 }

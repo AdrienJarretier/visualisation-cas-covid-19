@@ -1,6 +1,45 @@
 
 
 $(function () {
+
+
+    $('#tooltip').hide();
+
+
+    function generateGetBoundingClientRect(x = 0, y = 0) {
+        return () => ({
+            width: 0,
+            height: 0,
+            top: y,
+            right: x,
+            bottom: y,
+            left: x,
+        });
+    }
+
+    const virtualElement = {
+        getBoundingClientRect: generateGetBoundingClientRect(),
+    };
+
+    const tooltip = document.querySelector('#tooltip');
+    const instance = Popper.createPopper(virtualElement, tooltip, {
+        placement: 'right-end'
+    });
+    // const instance = createPopper(virtualElement, popper);
+
+    document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+        virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
+        instance.update();
+    });
+
+    // var checkboxes = document.getElementsByTagName('input');
+    // for (var i=0; i<checkboxes.length; i++)  {
+    //     if (checkboxes[i].type == 'checkbox')   {
+    //         checkboxes[i].checked = false;
+    //     }
+    // }
+
+
     // set the dimensions of the canvas
     var margin = { top: 20, right: 80, bottom: 70, left: 40 },
         width = 1200 - margin.left - margin.right,
@@ -18,13 +57,18 @@ $(function () {
 
 
     // add the SVG element
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#barchart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+    var formatTime = d3.timeFormat("%e %B");
+    // Define the div for the tooltip
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     // ajax request to GET the data 
 
@@ -74,6 +118,7 @@ $(function () {
             .text("Number of cases");
 
 
+
         // Add bar chart
         svg.selectAll("bar")
             .data(data)
@@ -82,19 +127,58 @@ $(function () {
             .attr("x", function (d) { return x(d.date); })
             .attr("width", width / data.length)
             .attr("y", function (d) { return y(d.cases); })
-            .attr("height", function (d) { return height - y(d.cases); });
+            .attr("height", function (d) { return height - y(d.cases); })
+            .on("mouseover", function (d) {
+                // div.transition()
+                //     .duration(200)
+                //     .style("opacity", .9);
+                // div.html(formatTime(d.date) + "<br>" + d.cases + " cases")
+                //     .style("left", (d3.event.pageX + 5) + "px")
+                //     .style("top", (d3.event.pageY - 28) + "px");
+
+                $('#tooltip').show();
+
+
+                $('#tooltip').html(formatTime(d.date) + "<br>" + d.cases + " cases");
+
+
+            });
+
+
+
+        d3.select("#logCheckbox").on("click", function () {
+            if (this.checked) {
+                y = d3.scaleLog()
+                    .domain([1, d3.max(data, function (d) { return d.cases; })])
+                    .range([height, 0]);
+            } else {
+                y = d3.scaleLinear()
+                    .domain([0, d3.max(data, function (d) { return d.cases; })])
+                    .range([height, 0]);
+            }
+
+            yAxis.scale(y).tickFormat(d3.format("~s"));
+
+            d3.select("g.axis.y")
+                .transition()
+                .duration(600)
+                .call(yAxis)
+
+            d3.selectAll("rect")
+                .transition()
+                .delay(0)
+                .duration(600)
+                .attr("y", function (d) {
+                    if (d.cases == 0) { return y(d.cases + 1); }
+                    else { return y(d.cases) }
+                })
+                .attr("height", function (d) {
+                    if (d.cases == 0) { return height - y(d.cases + 1); }
+                    else { return height - y(d.cases) }
+                })
+        })
     }
     drawBarchart();
-
-
-
-
-
-
-
-
-
-
 });
 
 
