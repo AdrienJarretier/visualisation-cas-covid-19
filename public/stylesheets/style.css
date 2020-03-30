@@ -39,3 +39,13 @@ div.tooltip {
   border-radius: 8px;			
   pointer-events: none;			
 }
+
+
+#tooltip {
+  background-color: #333;
+  color: white;
+  display: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}

@@ -3,6 +3,34 @@
 $(function () {
 
 
+    $('#tooltip').hide();
+
+
+    function generateGetBoundingClientRect(x = 0, y = 0) {
+        return () => ({
+            width: 0,
+            height: 0,
+            top: y,
+            right: x,
+            bottom: y,
+            left: x,
+        });
+    }
+
+    const virtualElement = {
+        getBoundingClientRect: generateGetBoundingClientRect(),
+    };
+
+    const tooltip = document.querySelector('#tooltip');
+    const instance = Popper.createPopper(virtualElement, tooltip, {
+        placement: 'right-end'
+    });
+    // const instance = createPopper(virtualElement, popper);
+
+    document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+        virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
+        instance.update();
+    });
 
     // var checkboxes = document.getElementsByTagName('input');
     // for (var i=0; i<checkboxes.length; i++)  {
@@ -90,6 +118,7 @@ $(function () {
             .text("Number of cases");
 
 
+
         // Add bar chart
         svg.selectAll("bar")
             .data(data)
@@ -100,17 +129,19 @@ $(function () {
             .attr("y", function (d) { return y(d.cases); })
             .attr("height", function (d) { return height - y(d.cases); })
             .on("mouseover", function (d) {
-                div.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                div.html(formatTime(d.date) + "<br>" + d.cases + " cases")
-                    .style("left", (d3.event.pageX + 5) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-            .on("mouseout", function (d) {
-                div.transition()
-                    .duration(500)
-                    .style("opacity", 0);
+                // div.transition()
+                //     .duration(200)
+                //     .style("opacity", .9);
+                // div.html(formatTime(d.date) + "<br>" + d.cases + " cases")
+                //     .style("left", (d3.event.pageX + 5) + "px")
+                //     .style("top", (d3.event.pageY - 28) + "px");
+
+                $('#tooltip').show();
+
+
+                $('#tooltip').html(formatTime(d.date) + "<br>" + d.cases + " cases");
+
+
             });
 
 
