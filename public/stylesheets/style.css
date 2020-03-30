@@ -39,3 +39,12 @@ div.tooltip {
   border-radius: 8px;			
   pointer-events: none;			
 }
+
+.brush .extent {
+  stroke: #FFF;
+  shape-rendering: crispEdges;
+}
+
+.area {
+  fill: rgb(228, 203, 207);
+}
