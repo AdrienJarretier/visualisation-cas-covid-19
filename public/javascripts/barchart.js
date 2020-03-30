@@ -131,12 +131,12 @@ $(function () {
             
             d3.select("g.axis.y")
                 .transition()
-                .duration(500)
+                .duration(600)
                 .call(yAxis);
             
             d3.selectAll("rect")
                 .transition()
-                .delay(400)
+                .delay(0)
                 .duration(600)
                 .attr("y", function (d) { if(d.cases==0){return y(d.cases+1);}
                 else{return y(d.cases)}})
