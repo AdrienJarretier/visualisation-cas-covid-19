@@ -29,7 +29,7 @@ $(function () {
 
 
     // add the SVG element
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#barchart").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -103,7 +103,7 @@ $(function () {
                 div.transition()		
                     .duration(200)		
                     .style("opacity", .9);		
-                div	.html(formatTime(d.date) + "<br/>"  + d.cases+ " cases")	
+                div	.html(formatTime(d.date) + "<br>"  + d.cases+ " cases")	
                     .style("left", (d3.event.pageX + 5) + "px")		
                     .style("top", (d3.event.pageY - 28) + "px");	
                 })					
