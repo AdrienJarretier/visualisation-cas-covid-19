@@ -25,7 +25,7 @@ $(function () {
 
     var xAxis = d3.axisBottom(x)
 
-    var yAxis = d3.axisLeft(y).ticks(10);
+    var yAxis = d3.axisLeft(y).ticks(10).tickFormat(d3.format("~s"));
 
 
     // add the SVG element
