@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title><%= globalTitle %></title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
-  <script src="extLibs/jquery-3.4.1.min.js"></script>
-  <script src="extLibs/d3.v5.min.js"></script>
-  <script src="extLibs/d3-format.v1.min.js"></script>
-  <script src="javascripts/barchart.js"></script>
-
+<head lang="fr">
   <%-
       include('partials/head.ejs')
     %>
+
+  <script src="javascripts/barchart.js"></script>
 </head>
 
 <body>
   <h1><%= globalTitle %></h1>
 
-  <div class="controls">
-    <input id="logCheckbox" type="checkbox"></input>
-	<label for="logCheckbox">Log scale</label>
+  <div class="custom-control custom-switch">
+
+    <input id="logCheckbox" type="checkbox" class="custom-control-input"></input>
+    <label class="custom-control-label" for="logCheckbox">Echelle logarithmique</label>
+
   </div>
 
+  <div id="tooltip" role="tooltip"></div>
+
+  <div id="barchart"></div>
+
+  <%- 
+  
+    include('partials/footer.ejs')
+  
+  %>
 </body>
 
 </html>
