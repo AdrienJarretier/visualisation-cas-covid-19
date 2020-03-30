@@ -26,8 +26,6 @@ async function downloadData() {
             skip_empty_lines: true
         });
 
-        console.log(records);
-
         return records;
 
     } catch (err) {

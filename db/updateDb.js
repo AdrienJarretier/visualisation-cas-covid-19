@@ -86,7 +86,11 @@ async function fillCasesByCountry(countryGeoId) {
 
     });
 
-    db.close();
+    db.close(() => {
+
+        console.log('cases for country ' + countryGeoId + ' added');
+
+    });
 }
 
 
