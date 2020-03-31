@@ -28,7 +28,15 @@ $(function () {
 
     const tooltip = document.querySelector('#tooltip');
     const instance = Popper.createPopper(virtualElement, tooltip, {
-        placement: 'right-end'
+        placement: 'right-end',
+        modifiers: [
+            {
+                name: 'offset',
+                options: {
+                    offset: [10, 20],
+                },
+            },
+        ]
     });
     // const instance = createPopper(virtualElement, popper);
 
@@ -145,6 +153,11 @@ $(function () {
 
                 $('#tooltip').html(formatDate(d.date) + "<br>" + d.cases + " nouveaux cas");
 
+
+            })
+            .on("mouseout", function () {
+
+                $('#tooltip').hide();
 
             });
 
