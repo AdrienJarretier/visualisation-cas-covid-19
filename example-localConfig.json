@@ -1,0 +1,9 @@
+{
+    "listeningInterface": "127.0.0.1",
+    "scheduleUpdate": {
+        "enabled": true,
+        "scheduleTime": {
+            "minute": 5
+        }
+    }
+}
