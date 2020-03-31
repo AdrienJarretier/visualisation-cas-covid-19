@@ -6,23 +6,32 @@
 
 
 const db = require('../db/updateDb.js');
+const common = require('../common.js');
 
 var schedule = require('node-schedule');
 
-var j = schedule.scheduleJob({ minute: 5 }, function (fireDate) {
+if (common.serverConfig.scheduleUpdate.enabled) {
+
+  console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
+  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, function (fireDate) {
 
 
-  console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
+    console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
 
-  db.fillCasesByCountry('FR');
+    db.fillCasesByCountry('FR');
 
-});
+  });
+}
+else {
+
+  console.log("scheduled update disabled");
+
+}
 
 var app = require('../app');
 var debug = require('debug')('visualisation-cas-covid-19:server');
 var http = require('http');
 
-const common = require('../common.js');
 
 /**
  * Get port from environment and store in Express.
