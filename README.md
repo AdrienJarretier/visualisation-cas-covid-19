@@ -9,14 +9,15 @@ Nodejs 12 : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
 cp example-localConfig.json localConfig.json
+cp botController/example-config.json botController/config.json
 ```
 
 Customize `localConfig.json`
+Customize `botController/config.json`
 
 ```bash
 npm install
 node db/createDb.js
-node db/updateDb.js
 ```
 
 Then start the web sever with `npm start`
