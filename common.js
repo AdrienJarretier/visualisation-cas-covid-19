@@ -5,6 +5,9 @@ const fs = require('fs');
 const superagent = require('superagent');
 
 const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+Object.assign(serverConfig, JSON.parse(fs.readFileSync('localConfig.json', 'utf8')));
+
+console.log(serverConfig);
 
 async function downloadData() {
 
