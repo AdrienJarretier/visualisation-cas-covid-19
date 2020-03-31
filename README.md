@@ -9,11 +9,11 @@ Nodejs 12 : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
 cp example-localConfig.json localConfig.json
-cp botController/example-config.json botController/config.json
+cp telegram-notifications-bot-controler/example-config.json telegram-notifications-bot-controler/config.json
 ```
 
 Customize `localConfig.json`
-Customize `botController/config.json`
+Customize `telegram-notifications-bot-controler/config.json`
 
 ```bash
 npm install
