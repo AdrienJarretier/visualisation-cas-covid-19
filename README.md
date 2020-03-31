@@ -1,5 +1,5 @@
 
-[http://evolution-coronavirus.tk/](http://evolution-coronavirus.tk/)
+## [http://evolution-coronavirus.tk/](http://evolution-coronavirus.tk/)
 
 Requirements :
 
@@ -8,6 +8,12 @@ Nodejs 12 : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 ```bash
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
+cp example-localConfig.json localConfig.json
+```
+
+Customize `localConfig.json`
+
+```bash
 npm install
 node db/createDb.js
 node db/updateDb.js
