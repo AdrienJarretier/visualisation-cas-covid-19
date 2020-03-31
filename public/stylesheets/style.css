@@ -55,3 +55,24 @@ div.tooltip {
   letter-spacing:0.1em;
   text-anchor: middle;
 }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+
+  border-color: rgb(173, 57, 72);
+  background-color: rgb(173, 57, 72);
+
+}
+
+.custom-select {
+
+  background-color: #6c757d;
+  color: #fff;
+  padding-right: 4em;
+  width: auto;
+
+}
+
+.custom-select:hover, .custom-select option:hover {
+  background-color: #545b62;
+  cursor: pointer;
+}
