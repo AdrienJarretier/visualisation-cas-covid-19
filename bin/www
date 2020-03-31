@@ -12,7 +12,7 @@ var schedule = require('node-schedule');
 
 if (common.serverConfig.scheduleUpdate.enabled) {
 
-  console.log("enabling scheduled update at " + common.serverConfig.scheduleUpdate.scheduleTime);
+  console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
   var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, function (fireDate) {
 
 
