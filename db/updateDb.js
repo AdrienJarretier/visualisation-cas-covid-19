@@ -1,6 +1,6 @@
 const common = require('../common.js');
 
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 
 
 
@@ -28,7 +28,7 @@ function addCountry(countryGeoId, name) {
 
     return new Promise((resolve, reject) => {
 
-        let db = new sqlite3.Database(common.serverConfig.db.database);
+        const db = new Database(common.serverConfig.db.database, { verbose: console.log });
 
         let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
 
@@ -56,7 +56,7 @@ async function fillCasesByCountry(countryGeoId) {
 
     let countryRecords = await getByCountry(countryGeoId);
 
-    let db = new sqlite3.Database(common.serverConfig.db.database);
+    const db = new Database(common.serverConfig.db.database, { verbose: console.log });
 
 
     console.log(' - filling cases for country ' + countryGeoId);

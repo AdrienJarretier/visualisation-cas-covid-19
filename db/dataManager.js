@@ -1,9 +1,13 @@
 
 // ------------------------------------------------------ REQUIRE
 
-const sqlite3 = require('sqlite3').verbose();
+
+const Database = require('better-sqlite3');
+
 const common = require('../common.js');
-let db = new sqlite3.Database(common.serverConfig.db.database);
+
+
+const db = new Database(common.serverConfig.db.database, { verbose: console.log });
 
 // ------------------------------------------------------ INNER DB METHODS
 
@@ -45,27 +49,31 @@ function transfer_to_key(rows, transfer_key) {
 
 // ------------------ SQL DB CALLER
 
-function select_db(sql) {
+function select_db(sql, bindParameters) {
     return new Promise(resolve => {
-        db.all(sql, function(err, rows) {
-            resolve(rows);
-        })
+
+        const stmt = db.prepare(sql);
+        const rows = stmt.all(bindParameters);
+
+        resolve(rows);
+        
     })
 }
 
 // ------------------ SQL SUGAR
 
 async function db_get_all_by_prop(table, prop, value) {
-    if (typeof value == 'string') {
-        value = '"' + value + '"';
-    }
-    let sql = 'SELECT * FROM ' + table + ' WHERE ' + prop + ' = ' + value;
-    return await select_db(sql);
+
+    let sql = 'SELECT * FROM ' + table + ' WHERE ' + prop + ' = ?;' ;
+    return await select_db(sql, value);
+
 }
 
 async function db_get_all(table) {
-    let sql = 'SELECT * FROM ' + table;
-    return await select_db(sql);
+
+    let sql = 'SELECT * FROM ?;';
+    return await select_db(sql, table);
+
 }
 
 // ------------------------------------------------------ CORE METHODS
@@ -95,7 +103,7 @@ function compute_data_accumulation(end_date, props, full_rows) {
 
 async function get_data_by_geoid(geoid) {
 
-    let geodata = await db_get_all_by_prop('cases', 'Country', geoid);
+    let geodata = await db_get_all_by_prop('cases', 'country', geoid);
 
     // -- compute accumulation
     geodata = geodata.map(day_data => {
