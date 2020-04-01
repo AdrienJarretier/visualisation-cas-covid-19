@@ -1,0 +1,29 @@
+{
+    "port": 3000,
+    "listeningInterface": "127.0.0.1",
+    "scheduleUpdate": {
+
+        "enabled": {
+            "@detail": {
+                "input_type": "option",
+                "options": {
+                    "true": true,
+                    "false": false
+                },
+                "skip_next_if": false
+            }
+        },
+
+        "scheduleTime": {
+            "@detail": {
+                "input_type": "option",
+                "reset_after_input": true,
+                "options": {
+                    "minute": {"minute": 5},
+                    "hour": {"hour": 2}
+                }
+            }
+        }
+
+    }
+}
