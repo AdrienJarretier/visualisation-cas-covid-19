@@ -52,7 +52,10 @@ function transfer_to_key(rows, transfer_key) {
 function select_db(sql, bindParameters) {
     return new Promise(resolve => {
 
+        bindParameters = bindParameters || [];
+
         const stmt = db.prepare(sql);
+        
         const rows = stmt.all(bindParameters);
 
         resolve(rows);
@@ -71,8 +74,8 @@ async function db_get_all_by_prop(table, prop, value) {
 
 async function db_get_all(table) {
 
-    let sql = 'SELECT * FROM ?;';
-    return await select_db(sql, table);
+    let sql = 'SELECT * FROM '+table;
+    return await select_db(sql);
 
 }
 
