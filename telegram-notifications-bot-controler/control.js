@@ -5,8 +5,7 @@ const superagent = require('superagent');
 
 const common = require('../common.js');
 
-let rawdata = fs.readFileSync('./config.json');
-let config = common.serverConfig['telegram-notifications-bot-controler'];
+const config = common.serverConfig['telegram-notifications-bot-controler'];
 
 const BOT_TOKEN = config.bot_token;
 

@@ -5,5 +5,14 @@
         "scheduleTime": {
             "minute": 5
         }
+    },
+    "telegram-notifications-bot-controler":{
+
+        "telegram_api_url": "https://api.telegram.org/bot",
+        "bot_token": "110201543:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw",
+        "db": {
+            "database": "telegram-notifications-bot-controler/telegramClients.db"
+        }
+
     }
 }

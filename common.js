@@ -7,8 +7,6 @@ const superagent = require('superagent');
 const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 Object.assign(serverConfig, JSON.parse(fs.readFileSync('localConfig.json', 'utf8')));
 
-serverConfig['telegram-notifications-bot-controler'] = JSON.parse(fs.readFileSync('telegram-notifications-bot-controler/config.json', 'utf8'));
-
 
 console.log(JSON.stringify(serverConfig, null, 2));
 console.log()
