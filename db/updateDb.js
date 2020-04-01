@@ -56,41 +56,41 @@ async function fillCasesByCountry(countryGeoId) {
 
     let countryRecords = await getByCountry(countryGeoId);
 
-    const db = new Database(common.serverConfig.db.database, { verbose: console.log });
+    const db = new Database(common.serverConfig.db.database);
 
 
     console.log(' - filling cases for country ' + countryGeoId);
 
-    db.serialize(function () {
 
-        let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
+    let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
 
-        stmt.on('error', (err) => {
+    let rowsInserted = 0;
 
+    for (let record of countryRecords) {
 
-        });
+        let year = record.year;
+        let month = parseInt(record.month) - 1;
+        let day = record.day;
 
-        for (let record of countryRecords) {
-
-            let year = record.year;
-            let month = parseInt(record.month) - 1;
-            let day = record.day;
-
-            let date = (new Date(Date.UTC(year, month, day))).toJSON();
+        let date = (new Date(Date.UTC(year, month, day))).toJSON();
 
 
-            stmt.run(countryGeoId, date, record.cases, record.deaths);
+        try {
+
+            const info = stmt.run(countryGeoId, date, record.cases, record.deaths);
+
+            rowsInserted += info.changes;
+
+        } catch (err) {
 
         }
-        stmt.finalize();
 
-    });
 
-    db.close(() => {
+    }
+    console.log(rowsInserted + " rows inserted");
 
-        console.log('cases for country ' + countryGeoId + ' added');
-
-    });
+    db.close();
+    console.log('cases for country ' + countryGeoId + ' added');
 }
 
 
@@ -99,5 +99,7 @@ async function fillCasesByCountry(countryGeoId) {
 //     .then(() => {
 //         fillCasesByCountry('FR');
 //     });
+
+fillCasesByCountry('FR');
 
 exports.fillCasesByCountry = fillCasesByCountry;
