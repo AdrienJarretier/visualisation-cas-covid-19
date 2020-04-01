@@ -18,17 +18,17 @@ function remove_props_inplace(obj, props_to_remove) {
 
     // -- Array management
     if (Array.isArray(obj)) {
-        for(let item of obj) {
-            for(let prop of props_to_remove) {
+        for (let item of obj) {
+            for (let prop of props_to_remove) {
                 delete item[prop]
             }
         }
-    } 
+    }
 
     // -- Object management
     else {
-        for(let id in obj) {
-            for(let prop of props_to_remove) {
+        for (let id in obj) {
+            for (let prop of props_to_remove) {
                 delete obj[id][prop]
             }
         }
@@ -39,7 +39,7 @@ function transfer_to_key(rows, transfer_key) {
 
     let data_obj = {}
 
-    for(let row of rows) {
+    for (let row of rows) {
         let value_to_transfer = row[transfer_key];
         data_obj[value_to_transfer] = row;
     }
@@ -55,11 +55,11 @@ function select_db(sql, bindParameters) {
         bindParameters = bindParameters || [];
 
         const stmt = db.prepare(sql);
-        
+
         const rows = stmt.all(bindParameters);
 
         resolve(rows);
-        
+
     })
 }
 
@@ -67,14 +67,14 @@ function select_db(sql, bindParameters) {
 
 async function db_get_all_by_prop(table, prop, value) {
 
-    let sql = 'SELECT * FROM ' + table + ' WHERE ' + prop + ' = ?;' ;
+    let sql = 'SELECT * FROM ' + table + ' WHERE ' + prop + ' = ?;';
     return await select_db(sql, value);
 
 }
 
 async function db_get_all(table) {
 
-    let sql = 'SELECT * FROM '+table;
+    let sql = 'SELECT * FROM ' + table;
     return await select_db(sql);
 
 }
@@ -89,8 +89,8 @@ function compute_data_accumulation(end_date, props, full_rows) {
     return full_rows.reduce((accu, day_data) => {
 
         let current_date = new Date(day_data.date)
-        if(current_date <= end_date) {
-            for(let prop of props) {
+        if (current_date <= end_date) {
+            for (let prop of props) {
                 accu += day_data[prop]
             }
             return accu
@@ -116,7 +116,7 @@ async function get_data_by_geoid(geoid) {
         day_data.cumul_cases = compute_data_accumulation(day_date, ['cases'], geodata)
         day_data.cumul_deaths = compute_data_accumulation(day_date, ['deaths'], geodata)
         day_data.total = day_data.cumul_cases + day_data.cumul_deaths
-        
+
         return day_data
 
     })
