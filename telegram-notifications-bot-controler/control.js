@@ -30,6 +30,13 @@ const METHODS = {
 
 }
 
+let commandHandlers = {
+
+  start: () => { }
+
+};
+
+
 function makeApiCallUrl(method) {
 
   let url = BASE_API_ULR + BOT_TOKEN + '/' + method;
@@ -92,27 +99,58 @@ async function getUpdate(timeout) {
 }
 
 
-async function pollUpdates(interval) {
+async function pollUpdates(updateHandler) {
 
   console.log((new Date()).toLocaleString());
   console.log("polling update");
 
-  let results = await getUpdate(interval);
+  let results = await getUpdate(3600);
 
   for (let result of results) {
 
-    console.log(result);
-
     last_update_id = result.update_id;
 
-    console.log(result.message);
+    updateHandler(result);
 
   }
 
-  pollUpdates(interval);
+  pollUpdates(updateHandler);
 
 }
 
-pollUpdates(3600);
 
-exports.sendMessage = sendMessage
+function onStart(callback) {
+
+  commandHandlers.start = callback;
+
+}
+
+console.log("telegram notification bot starts polling");
+pollUpdates(function (result) {
+
+  let containsStart = false;
+
+  for (let entity of result.message.entities) {
+
+    if (entity.type == 'bot_command') {
+
+      if (result.message.text.startsWith('/start')) {
+
+        containsStart = true;
+      }
+
+    }
+
+  }
+
+  if (containsStart) {
+
+    commandHandlers.start(result.message);
+
+  }
+
+
+});
+
+exports.onStart = onStart;
+exports.sendMessage = sendMessage;

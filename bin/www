@@ -9,6 +9,9 @@ const db = require('../db/updateDb.js');
 const common = require('../common.js');
 const telegramNotifier = require('../telegram-notifications-bot-controler/control.js');
 
+
+
+
 var schedule = require('node-schedule');
 
 if (common.serverConfig.scheduleUpdate.enabled) {
