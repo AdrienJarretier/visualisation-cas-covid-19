@@ -19,7 +19,7 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
 
     console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
-    
+
     let rowsInserted = await db.fillCasesByCountry('FR');
     console.log(rowsInserted + " rows inserted");
 
