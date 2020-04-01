@@ -3,8 +3,10 @@
 const fs = require('fs');
 const superagent = require('superagent');
 
-let rawdata = fs.readFileSync('config.json');
-let config = JSON.parse(rawdata);
+const common = require('../common.js');
+
+let rawdata = fs.readFileSync('./config.json');
+let config = common.serverConfig['telegram-notifications-bot-controler'];
 
 const BOT_TOKEN = config.bot_token;
 
@@ -62,5 +64,56 @@ function sendMessage(text) {
   simpleRequest(METHODS.sendMessage, { text: text })
 
 }
+
+let last_update_id = 0;
+
+async function getUpdate(timeout) {
+
+  try {
+
+    let url = makeApiCallUrl('getUpdates');
+    console.log(url);
+    let data = await superagent.get(url)
+      .query(
+        {
+          offset: (last_update_id + 1),
+          timeout: timeout
+        }
+      );
+
+    return data.body.result;
+
+  }
+  catch (e) {
+
+    console.log(e);
+
+  }
+
+}
+
+
+async function pollUpdates(interval) {
+
+  console.log((new Date()).toLocaleString());
+  console.log("polling update");
+
+  let results = await getUpdate(interval);
+
+  for (let result of results) {
+
+    console.log(result);
+
+    last_update_id = result.update_id;
+
+    console.log(result.message);
+
+  }
+
+  pollUpdates(interval);
+
+}
+
+pollUpdates(3600);
 
 exports.sendMessage = sendMessage
