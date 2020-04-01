@@ -9,8 +9,24 @@ const db = require('../db/updateDb.js');
 const common = require('../common.js');
 const telegramNotifier = require('../telegram-notifications-bot-controler/control.js');
 
+const WELCOME_MSG = `Bonjour,
+je vous confirme avoir enregistré votre souscription.
+Je vous notifierai chaque jour lorsque de nouvelles données sont disponibles sur
+http://evolution-coronavirus.tk/
+`
+
+telegramNotifier.onStart(function (message) {
 
 
+  console.log('------------------------------');
+  console.log('start from');
+  console.log(message.chat.id);
+  console.log('sending ' + WELCOME_MSG)
+  console.log('------------------------------');
+
+  telegramNotifier.sendMessage(WELCOME_MSG, message.chat.id);
+
+})
 
 var schedule = require('node-schedule');
 

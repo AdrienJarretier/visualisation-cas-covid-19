@@ -8,7 +8,7 @@ const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 Object.assign(serverConfig, JSON.parse(fs.readFileSync('localConfig.json', 'utf8')));
 
 
-console.log(JSON.stringify(serverConfig, null, 2));
+console.log(JSON.stringify(serverConfig, null, 4));
 console.log()
 
 async function downloadData() {

@@ -23,9 +23,7 @@ const METHODS = {
   },
   sendMessage: {
     method: "sendMessage",
-    fixedParameters: {
-      chat_id: config.chat_id
-    }
+    fixedParameters: {}
   }
 
 }
@@ -65,9 +63,12 @@ async function simpleRequest(method, parameters) {
 
 }
 
-function sendMessage(text) {
+function sendMessage(text, chat_id) {
 
-  simpleRequest(METHODS.sendMessage, { text: text })
+  simpleRequest(METHODS.sendMessage, {
+    text: text,
+    chat_id: chat_id
+  })
 
 }
 
@@ -101,8 +102,8 @@ async function getUpdate(timeout) {
 
 async function pollUpdates(updateHandler) {
 
-  console.log((new Date()).toLocaleString());
-  console.log("polling update");
+  // console.log((new Date()).toLocaleString());
+  // console.log("polling update");
 
   let results = await getUpdate(3600);
 
