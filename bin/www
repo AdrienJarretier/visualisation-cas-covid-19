@@ -13,13 +13,15 @@ var schedule = require('node-schedule');
 
 if (common.serverConfig.scheduleUpdate.enabled) {
 
+  console.log();
   console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
-  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, function (fireDate) {
+  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, async function (fireDate) {
 
 
     console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
-
-    db.fillCasesByCountry('FR');
+    
+    let rowsInserted = await db.fillCasesByCountry('FR');
+    console.log(rowsInserted + " rows inserted");
 
   });
 }

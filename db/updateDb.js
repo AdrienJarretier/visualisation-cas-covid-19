@@ -87,10 +87,11 @@ async function fillCasesByCountry(countryGeoId) {
 
 
     }
-    console.log(rowsInserted + " rows inserted");
 
     db.close();
     console.log('cases for country ' + countryGeoId + ' added');
+
+    return rowsInserted;
 }
 
 
@@ -100,6 +101,7 @@ async function fillCasesByCountry(countryGeoId) {
 //         fillCasesByCountry('FR');
 //     });
 
-fillCasesByCountry('FR');
+// let rowsInserted = fillCasesByCountry('FR');
+// console.log(rowsInserted + " rows inserted");
 
 exports.fillCasesByCountry = fillCasesByCountry;
