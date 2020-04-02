@@ -1,5 +1,5 @@
 {
-    "dataBaseUri": "https://opendata.ecdc.europa.eu/covid19/casedistribution",
+    "dataBaseUri": "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv",
     "db": {
         "database": "db/covid19cases.db"
     },
