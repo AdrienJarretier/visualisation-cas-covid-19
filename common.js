@@ -5,7 +5,7 @@ const fs = require('fs');
 const superagent = require('superagent');
 const local_config_loader = require('env-config-prompt');
 
-const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+const serverConfig = JSON.parse(fs.readFileSync('globalConfig.json', 'utf8'));
 const local_config = local_config_loader(false,'localConfig.json','localConfig_template.json','server config');
 
 Object.assign(serverConfig, local_config);
