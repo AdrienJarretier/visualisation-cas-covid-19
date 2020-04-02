@@ -15,7 +15,8 @@ var schedule = require('node-schedule');
 
 
 
-const DB_FILENAME = common.serverConfig['telegram-notifications-bot-controler'].db.database;
+const CASES_DB = common.serverConfig.db.database;
+const TELEGRAM_CLIENTS_DB = common.serverConfig['telegram-notifications-bot-controler'].db.database;
 
 const WELCOME_MSG = `Bonjour,
 je vous confirme avoir enregistré votre souscription.
@@ -32,7 +33,7 @@ http://evolution-coronavirus.tk/`
 telegramNotifier.onStart(function (message) {
 
 
-  const db = new Database(DB_FILENAME);
+  const db = new Database(TELEGRAM_CLIENTS_DB);
 
   let stmt = db.prepare("SELECT count(*) FROM clients WHERE chat_id = ? ");
   let alreadyInDb = stmt.get(message.chat.id)['count(*)'] == 1;
@@ -88,8 +89,40 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
     console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
 
-    let rowsInserted = await updateDb.fillCasesByCountry('FR');
-    console.log(rowsInserted + " rows inserted");
+    let casesUpdateResult = await updateDb.fillCasesByCountry('FR');
+    console.log(casesUpdateResult.rowsInserted + " rows inserted");
+
+    if (casesUpdateResult.rowsInserted > 0) {
+
+
+      let casesDb = new Database(CASES_DB)
+      let stmt = casesDb.prepare("SELECT * from cases INNER JOIN countries ON cases.country=countries.geoid ORDER BY date DESC");
+
+      let casesPastDay = stmt.get()
+
+      casesDb.close();
+
+      console.log(casesPastDay);
+
+      const db = new Database(TELEGRAM_CLIENTS_DB);
+
+      stmt = db.prepare("SELECT * from clients");
+
+      let rows = stmt.all();
+
+      console.log("notifying registered clients of new data");
+
+      for (let row of rows) {
+
+        telegramNotifier.sendMessage('http://evolution-coronavirus.tk/ \n'
+          + casesPastDay['cases'] + ' nouveaux contaminés en ' + casesPastDay['name']
+          , row['chat_id']);
+
+      }
+
+      db.close();
+
+    }
 
   });
 }

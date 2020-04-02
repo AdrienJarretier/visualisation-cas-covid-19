@@ -65,6 +65,7 @@ async function fillCasesByCountry(countryGeoId) {
     let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
 
     let rowsInserted = 0;
+    let lastInsertRowid;
 
     for (let record of countryRecords) {
 
@@ -80,6 +81,7 @@ async function fillCasesByCountry(countryGeoId) {
             const info = stmt.run(countryGeoId, date, record.cases, record.deaths);
 
             rowsInserted += info.changes;
+            lastInsertRowid = info.lastInsertRowid;
 
         } catch (err) {
 
@@ -91,7 +93,7 @@ async function fillCasesByCountry(countryGeoId) {
     db.close();
     console.log('cases for country ' + countryGeoId + ' added');
 
-    return rowsInserted;
+    return { rowsInserted: rowsInserted, lastInsertRowid: lastInsertRowid };
 }
 
 
