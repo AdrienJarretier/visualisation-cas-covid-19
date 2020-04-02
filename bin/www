@@ -5,20 +5,124 @@
  */
 
 
-const db = require('../db/updateDb.js');
+const updateDb = require('../db/updateDb.js');
 const common = require('../common.js');
+const telegramNotifier = require('../telegram-notifications-bot-controler/control.js');
+const Database = require('better-sqlite3');
 
 var schedule = require('node-schedule');
 
+
+
+
+const CASES_DB = common.serverConfig.db.database;
+const TELEGRAM_CLIENTS_DB = common.serverConfig['telegram-notifications-bot-controler'].db.database;
+
+const WELCOME_MSG = `Bonjour,
+je vous confirme avoir enregistré votre souscription.
+Je vous notifierai chaque jour lorsque de nouvelles données sont disponibles sur
+http://evolution-coronavirus.tk/
+`
+
+const ALREADY_REGISTERED = `Vous êtes déjà enregistré pour reçevoir les notifications de
+http://evolution-coronavirus.tk/`
+
+
+
+
+telegramNotifier.onStart(function (message) {
+
+
+  const db = new Database(TELEGRAM_CLIENTS_DB);
+
+  let stmt = db.prepare("SELECT count(*) FROM clients WHERE chat_id = ? ");
+  let alreadyInDb = stmt.get(message.chat.id)['count(*)'] == 1;
+
+
+  console.log('    ----    ');
+  console.log('start from');
+  console.log(message.chat.id);
+
+  if (alreadyInDb) {
+
+    console.log('chat id already in db');
+    telegramNotifier.sendMessage(ALREADY_REGISTERED, message.chat.id);
+
+  } else {
+
+    console.log('sending welcome message')
+
+    telegramNotifier.sendMessage(WELCOME_MSG, message.chat.id);
+
+    stmt = db.prepare("INSERT INTO clients(chat_id) VALUES (?)");
+
+    try {
+
+      const info = stmt.run(message.chat.id);
+
+      console.log("succesfully inserted new chat id in db");
+
+    } catch (err) {
+
+      console.log("error when inserting new chat id in db");
+      console.log(err);
+
+    }
+
+  }
+
+  console.log('    ----    ');
+
+  db.close();
+
+})
+
+
+
+
 if (common.serverConfig.scheduleUpdate.enabled) {
 
+  console.log();
   console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
-  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, function (fireDate) {
+  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, async function (fireDate) {
 
 
     console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
 
-    db.fillCasesByCountry('FR');
+    let casesUpdateResult = await updateDb.fillCasesByCountry('FR');
+    console.log(casesUpdateResult.rowsInserted + " rows inserted");
+
+    if (casesUpdateResult.rowsInserted > 0) {
+
+
+      let casesDb = new Database(CASES_DB)
+      let stmt = casesDb.prepare("SELECT * from cases INNER JOIN countries ON cases.country=countries.geoid ORDER BY date DESC");
+
+      let casesPastDay = stmt.get()
+
+      casesDb.close();
+
+      console.log(casesPastDay);
+
+      const db = new Database(TELEGRAM_CLIENTS_DB);
+
+      stmt = db.prepare("SELECT * from clients");
+
+      let rows = stmt.all();
+
+      console.log("notifying registered clients of new data");
+
+      for (let row of rows) {
+
+        telegramNotifier.sendMessage('http://evolution-coronavirus.tk/ \n'
+          + casesPastDay['cases'] + ' nouveaux contaminés en ' + casesPastDay['name']
+          , row['chat_id']);
+
+      }
+
+      db.close();
+
+    }
 
   });
 }

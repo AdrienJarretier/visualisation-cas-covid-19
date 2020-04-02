@@ -136,8 +136,8 @@ $(function () {
             .data(data)
             .enter().append("rect")
             .attr("class", "bar")
-            .attr("x", function (d) { return x(d.date); })
-            .attr("width", width / data.length)
+            .attr("x", function (d) { return x(d.date) - width / (2 * data.length); })
+            .attr("width", width / (data.length))
             .attr("y", function (d) { return y(d.cases); })
             .attr("height", function (d) { return height - y(d.cases); })
             .on("mouseover", function (d) {

@@ -1,6 +1,6 @@
 const common = require('../common.js');
 
-const sqlite3 = require('sqlite3').verbose();
+const Database = require('better-sqlite3');
 
 
 
@@ -24,30 +24,13 @@ async function getByCountry(countryGeoId) {
 
 }
 
-function addCountry(countryGeoId, name) {
+function addCountry(db, countryGeoId, name) {
 
-    return new Promise((resolve, reject) => {
+    let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
+    stmt.run(countryGeoId, name);
 
-        let db = new sqlite3.Database(common.serverConfig.db.database);
+    console.log('country ' + countryGeoId + ', ' + name + ' added');
 
-        let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
-
-        stmt.on('error', (err) => {
-
-
-        });
-        stmt.run(countryGeoId, name);
-        stmt.finalize();
-
-        db.close(() => {
-
-            console.log('country ' + countryGeoId + ', ' + name + ' added');
-
-            resolve();
-
-        });
-
-    });
 }
 
 async function fillCasesByCountry(countryGeoId) {
@@ -56,41 +39,55 @@ async function fillCasesByCountry(countryGeoId) {
 
     let countryRecords = await getByCountry(countryGeoId);
 
-    let db = new sqlite3.Database(common.serverConfig.db.database);
+    const db = new Database(common.serverConfig.db.database);
+
+    // check first if country is already in db, if not add it
+
+    let stmt = db.prepare("SELECT count(geoid) FROM countries WHERE geoid = ?");
+    let countryInDb = stmt.get(countryGeoId)['count(geoid)'] > 0;
+
+    if (!countryInDb) {
+
+        addCountry(db, countryGeoId, countryRecords[0]['countriesAndTerritories'])
+
+    }
 
 
     console.log(' - filling cases for country ' + countryGeoId);
 
-    db.serialize(function () {
 
-        let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
+    stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
 
-        stmt.on('error', (err) => {
+    let rowsInserted = 0;
+    let lastInsertRowid;
 
+    for (let record of countryRecords) {
 
-        });
+        let year = record.year;
+        let month = parseInt(record.month) - 1;
+        let day = record.day;
 
-        for (let record of countryRecords) {
-
-            let year = record.year;
-            let month = parseInt(record.month) - 1;
-            let day = record.day;
-
-            let date = (new Date(Date.UTC(year, month, day))).toJSON();
+        let date = (new Date(Date.UTC(year, month, day))).toJSON();
 
 
-            stmt.run(countryGeoId, date, record.cases, record.deaths);
+        try {
+
+            const info = stmt.run(countryGeoId, date, record.cases, record.deaths);
+
+            rowsInserted += info.changes;
+            lastInsertRowid = info.lastInsertRowid;
+
+        } catch (err) {
 
         }
-        stmt.finalize();
 
-    });
 
-    db.close(() => {
+    }
 
-        console.log('cases for country ' + countryGeoId + ' added');
+    db.close();
+    console.log('cases for country ' + countryGeoId + ' added');
 
-    });
+    return { rowsInserted: rowsInserted, lastInsertRowid: lastInsertRowid };
 }
 
 
@@ -99,5 +96,8 @@ async function fillCasesByCountry(countryGeoId) {
 //     .then(() => {
 //         fillCasesByCountry('FR');
 //     });
+
+// let rowsInserted = fillCasesByCountry('FR');
+// console.log(rowsInserted + " rows inserted");
 
 exports.fillCasesByCountry = fillCasesByCountry;
