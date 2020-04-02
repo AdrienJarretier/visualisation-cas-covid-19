@@ -98,6 +98,8 @@ $(function () {
         x.domain(d3.extent(data, function (d) { return d.date; }));
         y.domain([0, d3.max(data, function (d) { return d.cases; })]);
 
+        x.range([0,width]);
+        xAxis.scale(x)
 
 
         dateMin = d3.min(data, function (d) { return d.cases; })
@@ -136,7 +138,7 @@ $(function () {
             .data(data)
             .enter().append("rect")
             .attr("class", "bar")
-            .attr("x", function (d) { return x(d.date) - width / (2 * data.length); })
+            .attr("x", function (d) { return x(d.date) - width / ( data.length); })
             .attr("width", width / (data.length))
             .attr("y", function (d) { return y(d.cases); })
             .attr("height", function (d) { return height - y(d.cases); })
