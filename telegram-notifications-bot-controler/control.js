@@ -79,7 +79,7 @@ async function getUpdate(timeout) {
   try {
 
     let url = makeApiCallUrl('getUpdates');
-    console.log(url);
+
     let data = await superagent.get(url)
       .query(
         {
@@ -129,25 +129,28 @@ function onStart(callback) {
 console.log("telegram notification bot starts polling");
 pollUpdates(function (result) {
 
-  let containsStart = false;
+  if (result.message.entities) {
 
-  for (let entity of result.message.entities) {
+    let containsStart = false;
 
-    if (entity.type == 'bot_command') {
+    for (let entity of result.message.entities) {
 
-      if (result.message.text.startsWith('/start')) {
+      if (entity.type == 'bot_command') {
 
-        containsStart = true;
+        if (result.message.text.startsWith('/start')) {
+
+          containsStart = true;
+        }
+
       }
 
     }
 
-  }
+    if (containsStart) {
 
-  if (containsStart) {
+      commandHandlers.start(result.message);
 
-    commandHandlers.start(result.message);
-
+    }
   }
 
 
