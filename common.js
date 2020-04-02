@@ -3,9 +3,12 @@
 const csvParse = require('csv-parse/lib/sync');
 const fs = require('fs');
 const superagent = require('superagent');
+const local_config_loader = require('env-config-prompt');
 
 const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-Object.assign(serverConfig, JSON.parse(fs.readFileSync('localConfig.json', 'utf8')));
+const local_config = local_config_loader(false,'localConfig.json','localConfig_template.json','server config');
+
+Object.assign(serverConfig, local_config);
 
 console.log(serverConfig);
 
