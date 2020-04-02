@@ -9,8 +9,7 @@
                 "options": {
                     "true": true,
                     "false": false
-                },
-                "skip_next_if": false
+                }
             }
         },
 
