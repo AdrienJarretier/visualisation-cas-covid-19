@@ -10,12 +10,6 @@ You need a telegram bot to send notifications to clients [https://core.telegram.
 ```bash
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
-cp example-localConfig.json localConfig.json
-```
-
-Customize `localConfig.json`
-
-```bash
 npm install
 node db/createDb.js
 node telegram-notifications-bot-controler/createDb.js
