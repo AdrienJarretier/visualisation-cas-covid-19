@@ -5,10 +5,17 @@
  */
 
 
-const db = require('../db/updateDb.js');
+const updateDb = require('../db/updateDb.js');
 const common = require('../common.js');
 const telegramNotifier = require('../telegram-notifications-bot-controler/control.js');
 const Database = require('better-sqlite3');
+
+var schedule = require('node-schedule');
+
+
+
+
+const DB_FILENAME = common.serverConfig['telegram-notifications-bot-controler'].db.database;
 
 const WELCOME_MSG = `Bonjour,
 je vous confirme avoir enregistré votre souscription.
@@ -19,10 +26,13 @@ http://evolution-coronavirus.tk/
 const ALREADY_REGISTERED = `Vous êtes déjà enregistré pour reçevoir les notifications de
 http://evolution-coronavirus.tk/`
 
+
+
+
 telegramNotifier.onStart(function (message) {
 
 
-  const db = new Database(common.serverConfig['telegram-notifications-bot-controler'].db.database);
+  const db = new Database(DB_FILENAME);
 
   let stmt = db.prepare("SELECT count(*) FROM clients WHERE chat_id = ? ");
   let alreadyInDb = stmt.get(message.chat.id)['count(*)'] == 1;
@@ -66,7 +76,8 @@ telegramNotifier.onStart(function (message) {
 
 })
 
-var schedule = require('node-schedule');
+
+
 
 if (common.serverConfig.scheduleUpdate.enabled) {
 
@@ -77,7 +88,7 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
     console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
 
-    let rowsInserted = await db.fillCasesByCountry('FR');
+    let rowsInserted = await updateDb.fillCasesByCountry('FR');
     console.log(rowsInserted + " rows inserted");
 
   });
