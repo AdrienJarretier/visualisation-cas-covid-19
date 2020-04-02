@@ -14,7 +14,6 @@ cp example-localConfig.json localConfig.json
 ```
 
 Customize `localConfig.json`
-Customize `telegram-notifications-bot-controler/config.json`
 
 ```bash
 npm install
