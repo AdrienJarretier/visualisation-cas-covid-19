@@ -16,7 +16,7 @@ console.log()
 
 async function downloadData() {
 
-    let uri = serverConfig.dataBaseUri + '/csv';
+    let uri = serverConfig.dataBaseUri;
     // let uri = '127.0.0.1:' + common.serverConfig.port + '/testjson.json';
 
     try {

@@ -24,30 +24,13 @@ async function getByCountry(countryGeoId) {
 
 }
 
-function addCountry(countryGeoId, name) {
+function addCountry(db, countryGeoId, name) {
 
-    return new Promise((resolve, reject) => {
+    let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
+    stmt.run(countryGeoId, name);
 
-        const db = new Database(common.serverConfig.db.database, { verbose: console.log });
+    console.log('country ' + countryGeoId + ', ' + name + ' added');
 
-        let stmt = db.prepare("INSERT INTO countries(geoid, name) VALUES (?, ?);");
-
-        stmt.on('error', (err) => {
-
-
-        });
-        stmt.run(countryGeoId, name);
-        stmt.finalize();
-
-        db.close(() => {
-
-            console.log('country ' + countryGeoId + ', ' + name + ' added');
-
-            resolve();
-
-        });
-
-    });
 }
 
 async function fillCasesByCountry(countryGeoId) {
@@ -58,11 +41,22 @@ async function fillCasesByCountry(countryGeoId) {
 
     const db = new Database(common.serverConfig.db.database);
 
+    // check first if country is already in db, if not add it
+
+    let stmt = db.prepare("SELECT count(geoid) FROM countries WHERE geoid = ?");
+    let countryInDb = stmt.get(countryGeoId)['count(geoid)'] > 0;
+
+    if (!countryInDb) {
+
+        addCountry(db, countryGeoId, countryRecords[0]['countriesAndTerritories'])
+
+    }
+
 
     console.log(' - filling cases for country ' + countryGeoId);
 
 
-    let stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
+    stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
 
     let rowsInserted = 0;
     let lastInsertRowid;

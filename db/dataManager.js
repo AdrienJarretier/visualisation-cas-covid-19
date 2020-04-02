@@ -7,7 +7,7 @@ const Database = require('better-sqlite3');
 const common = require('../common.js');
 
 
-const db = new Database(common.serverConfig.db.database, { verbose: console.log });
+const db = new Database(common.serverConfig.db.database);
 
 // ------------------------------------------------------ INNER DB METHODS
 
