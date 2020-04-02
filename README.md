@@ -5,11 +5,12 @@ Requirements :
 
 Nodejs 12 : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
+You need a telegram bot to send notifications to clients [https://core.telegram.org/bots](https://core.telegram.org/bots)
+
 ```bash
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
 cp example-localConfig.json localConfig.json
-cp telegram-notifications-bot-controler/example-config.json telegram-notifications-bot-controler/config.json
 ```
 
 Customize `localConfig.json`
@@ -18,6 +19,7 @@ Customize `telegram-notifications-bot-controler/config.json`
 ```bash
 npm install
 node db/createDb.js
+node telegram-notifications-bot-controler/createDb.js
 ```
 
 Then start the web sever with `npm start`
