@@ -24,5 +24,14 @@
             }
         }
 
+    },
+    "telegram-notifications-bot-controler":{
+        "bot_token": {
+            "@detail": {
+                "input_type": "value",
+                "type": "string",
+                "required": true
+            }
+        }
     }
 }
