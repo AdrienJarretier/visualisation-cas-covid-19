@@ -21,13 +21,12 @@
 
     "telegram-notifications-bot-controler": {
 
-        "bot_token": "",
-
-        "db": {
-            "database": "telegram-notifications-bot-controler/telegramClients.db"
-        },
-
-        "telegram_api_url": "https://api.telegram.org/bot"
-
+        "bot_token": {
+            "@detail": {
+                "input_type": "value",
+                "type": "string",
+                "required": true
+            }
+        }
     }
 }

@@ -17,5 +17,11 @@
                 }
             }
         }
+    },
+    "telegram-notifications-bot-controler": {
+        "db": {
+            "database": "telegram-notifications-bot-controler/telegramClients.db"
+        },
+        "telegram_api_url": "https://api.telegram.org/bot"
     }
 }
