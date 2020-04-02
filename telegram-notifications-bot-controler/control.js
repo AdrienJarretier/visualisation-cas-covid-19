@@ -105,7 +105,7 @@ async function pollUpdates(updateHandler) {
   // console.log((new Date()).toLocaleString());
   // console.log("polling update");
 
-  let results = await getUpdate(3600);
+  let results = await getUpdate(1200);
 
   for (let result of results) {
 

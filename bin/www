@@ -8,6 +8,7 @@
 const db = require('../db/updateDb.js');
 const common = require('../common.js');
 const telegramNotifier = require('../telegram-notifications-bot-controler/control.js');
+const Database = require('better-sqlite3');
 
 const WELCOME_MSG = `Bonjour,
 je vous confirme avoir enregistré votre souscription.
@@ -15,16 +16,53 @@ Je vous notifierai chaque jour lorsque de nouvelles données sont disponibles su
 http://evolution-coronavirus.tk/
 `
 
+const ALREADY_REGISTERED = `Vous êtes déjà enregistré pour reçevoir les notifications de
+http://evolution-coronavirus.tk/`
+
 telegramNotifier.onStart(function (message) {
 
 
-  console.log('------------------------------');
+  const db = new Database(common.serverConfig['telegram-notifications-bot-controler'].db.database);
+
+  let stmt = db.prepare("SELECT count(*) FROM clients WHERE chat_id = ? ");
+  let alreadyInDb = stmt.get(message.chat.id)['count(*)'] == 1;
+
+
+  console.log('    ----    ');
   console.log('start from');
   console.log(message.chat.id);
-  console.log('sending ' + WELCOME_MSG)
-  console.log('------------------------------');
 
-  telegramNotifier.sendMessage(WELCOME_MSG, message.chat.id);
+  if (alreadyInDb) {
+
+    console.log('chat id already in db');
+    telegramNotifier.sendMessage(ALREADY_REGISTERED, message.chat.id);
+
+  } else {
+
+    console.log('sending welcome message')
+
+    telegramNotifier.sendMessage(WELCOME_MSG, message.chat.id);
+
+    stmt = db.prepare("INSERT INTO clients(chat_id) VALUES (?)");
+
+    try {
+
+      const info = stmt.run(message.chat.id);
+
+      console.log("succesfully inserted new chat id in db");
+
+    } catch (err) {
+
+      console.log("error when inserting new chat id in db");
+      console.log(err);
+
+    }
+
+  }
+
+  console.log('    ----    ');
+
+  db.close();
 
 })
 
