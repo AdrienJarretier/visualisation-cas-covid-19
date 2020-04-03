@@ -54,39 +54,75 @@ $(function () {
 
 
     // set the dimensions of the canvas
+
+    var default_width = 1200;
+    var default_height = 600;
+    var default_ratio = default_width / default_height;
+
     var margin = { top: 20, right: 80, bottom: 90, left: 80 },
-        width = 1200 - margin.left - margin.right,
-        height = 600 - margin.top - margin.bottom;
+        width = default_width - margin.left - margin.right,
+        height = default_height - margin.top - margin.bottom;
 
 
-    // set the ranges
-    var x = d3.scaleTime().range([0, width], .05);
-    var y = d3.scaleLinear().range([height, 0]);
+    // Determine current size, which determines vars
+    function set_vars() {
+        //alert('setting vars')
+        current_width = window.innerWidth;
+        current_height = window.innerHeight;
 
+        current_ratio = current_width / current_height;
 
-    var xAxis = d3.axisBottom(x).tickFormat((d, i) => formatDate(d));
+        // Check if height is limiting factor
+        if (current_ratio > default_ratio) {
+            h = current_height;
+            w = h * default_ratio;
+            // Else width is limiting
+        } else {
+            w = current_width;
+            h = w / default_ratio;
+        }
 
-    var yAxis = d3.axisLeft(y).ticks(10).tickFormat((d, i) => (d).toLocaleString());
+        // Set new width and height based on graph dimensions
+        if (w > 1200) {
+            w = 1200;
+        }
+        if (h > 600) {
+            h = 600;
+        }
 
+        width = w - margin.left - margin.right;
+        height = h - margin.top - margin.bottom;
 
-    // add the SVG element
-    var svg = d3.select("#barchart").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+    };
 
-
-
-    // Define the div for the tooltip
-    var div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-    // ajax request to GET the data 
+    set_vars();
 
     async function drawBarchart() {
+
+        // set the ranges
+        var x = d3.scaleTime().range([0, width], .05);
+        var y = d3.scaleLinear().range([height, 0]);
+
+
+        var xAxis = d3.axisBottom(x).tickFormat((d, i) => formatDate(d));
+
+        var yAxis = d3.axisLeft(y).ticks(10).tickFormat((d, i) => (d).toLocaleString());
+
+
+        // add the SVG element
+        var svg = d3.select("#barchart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+        // Define the div for the tooltip
+        var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        // ajax request to GET the data 
 
         var data = await d3.json("api/cases/FR");
 
@@ -98,7 +134,7 @@ $(function () {
         x.domain(d3.extent(data, function (d) { return d.date; }));
         y.domain([0, d3.max(data, function (d) { return d.cases; })]);
 
-        x.range([0,width]);
+        x.range([0, width]);
         xAxis.scale(x)
 
 
@@ -132,13 +168,12 @@ $(function () {
             .text("Number of cases");
 
 
-
         // Add bar chart
         svg.selectAll("bar")
             .data(data)
             .enter().append("rect")
             .attr("class", "bar")
-            .attr("x", function (d) { return x(d.date) - width / ( data.length); })
+            .attr("x", function (d) { return x(d.date) - width / (data.length); })
             .attr("width", width / (data.length))
             .attr("y", function (d) { return y(d.cases); })
             .attr("height", function (d) { return height - y(d.cases); })
@@ -223,6 +258,17 @@ $(function () {
 
     }
     drawBarchart();
+
+    var resizeTimer;
+    window.onresize = function (event) {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            var s = d3.selectAll('svg');
+            s = s.remove();
+            set_vars();
+            drawBarchart();
+        }, 100);
+    }
 });
 
 
