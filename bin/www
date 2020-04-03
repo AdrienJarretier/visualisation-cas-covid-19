@@ -110,18 +110,42 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
         console.log(casesPastDay);
 
+        return casesPastDay['cases']
+
       }
 
-      return new_data
+      return 0
     }
 
-    let new_data = false
+    // --- data
 
-    new_data |= await update_cases('FR');
-    new_data |= await update_cases('AF');
-    new_data |= await update_cases('DE');
+    let countries = {
+      'FR': 'la France',
+      'DE': "l'Allemagne"
+    }
+    let news_str_array = []
+    let news_map = {};
+    let total = 0;
+
+    // --- parsing
+
+    for(let geoid in countries) {
+
+      let new_cases = await update_cases(geoid);
+
+      news_map[geoid] = new_cases;
+      total += new_cases
+
+      if (new_cases > 0) {
+        let country_name = countries[geoid]
+        news_str_array.push(' - ' + new_cases + ' nouveaux contaminés pour ' + country_name)
+      }
+
+    }
+
+    // --- send message
     
-    if (new_data && TELEGRAM_CLIENTS_ENABLED) {
+    if (total > 0 && TELEGRAM_CLIENTS_ENABLED) {
 
       const db = new Database(TELEGRAM_CLIENTS_DB);
 
@@ -131,11 +155,13 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
       console.log("notifying registered clients of new data");
 
+      let message_str = 'http://evolution-coronavirus.tk/ \n' + news_str_array.join('\n');
+
+      console.log(message_str)
+
       for (let row of rows) {
 
-        telegramNotifier.sendMessage('http://evolution-coronavirus.tk/ \n'
-          + casesPastDay['cases'] + ' nouveaux contaminés en ' + casesPastDay['name']
-          , row['chat_id']);
+        telegramNotifier.sendMessage(message_str, row['chat_id']);
 
       }
 
