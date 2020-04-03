@@ -1,0 +1,33 @@
+{
+    "port": 3000,
+    "listeningInterface": "127.0.0.1",
+    "scheduleUpdate": {
+
+        "enabled": {
+            "@detail": {
+                "input_type": "option",
+                "options": {
+                    "true": true,
+                    "false": false
+                }
+            }
+        },
+
+        "scheduleTime": {
+            "minute": 5
+        }
+
+    },
+
+    "telegram-notifications-bot-controler": {
+
+        "bot_token": "",
+
+        "db": {
+            "database": "telegram-notifications-bot-controler/telegramClients.db"
+        },
+
+        "telegram_api_url": "https://api.telegram.org/bot"
+
+    }
+}

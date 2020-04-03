@@ -40,6 +40,12 @@ div.tooltip {
   pointer-events: none;			
 }
 
+footer {
+
+  font-size: 1.2em;
+  
+}
+
 
 #tooltip {
   background-color: #333;
@@ -67,4 +73,10 @@ div.tooltip {
 .custom-control-input ~ .custom-control-label::before,
 .custom-control-input:checked ~ .custom-control-label::after {
   box-shadow: none !important; 
+}
+
+.withInlineLogo {
+  padding-left: 1.8em;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
 }
