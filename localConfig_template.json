@@ -21,6 +21,8 @@
 
     "telegram-notifications-bot-controler": {
 
+        "enabled": true,
+
         "bot_token": "",
 
         "db": {
