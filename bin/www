@@ -16,6 +16,7 @@ var schedule = require('node-schedule');
 
 
 const CASES_DB = common.serverConfig.db.database;
+const TELEGRAM_CLIENTS_ENABLED = common.serverConfig['telegram-notifications-bot-controler'].enabled;
 const TELEGRAM_CLIENTS_DB = common.serverConfig['telegram-notifications-bot-controler'].db.database;
 
 const WELCOME_MSG = `Bonjour,
@@ -89,20 +90,38 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
     console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
 
-    let casesUpdateResult = await updateDb.fillCasesByCountry('FR');
-    console.log(casesUpdateResult.rowsInserted + " rows inserted");
+    async function update_cases(geoid) {
 
-    if (casesUpdateResult.rowsInserted > 0) {
+      let casesUpdateResult = await updateDb.fillCasesByCountry(geoid);
+
+      console.log(casesUpdateResult.rowsInserted + " rows inserted for country " + geoid);
+
+      let new_data = casesUpdateResult.rowsInserted > 0
+
+      if (new_data) {
 
 
-      let casesDb = new Database(CASES_DB)
-      let stmt = casesDb.prepare("SELECT * from cases INNER JOIN countries ON cases.country=countries.geoid ORDER BY date DESC");
+        let casesDb = new Database(CASES_DB)
+        let stmt = casesDb.prepare("SELECT * from cases INNER JOIN countries ON cases.country=countries.geoid ORDER BY date DESC");
 
-      let casesPastDay = stmt.get()
+        let casesPastDay = stmt.get()
 
-      casesDb.close();
+        casesDb.close();
 
-      console.log(casesPastDay);
+        console.log(casesPastDay);
+
+      }
+
+      return new_data
+    }
+
+    let new_data = false
+
+    new_data |= await update_cases('FR');
+    new_data |= await update_cases('AF');
+    new_data |= await update_cases('DE');
+    
+    if (new_data && TELEGRAM_CLIENTS_ENABLED) {
 
       const db = new Database(TELEGRAM_CLIENTS_DB);
 
@@ -121,7 +140,6 @@ if (common.serverConfig.scheduleUpdate.enabled) {
       }
 
       db.close();
-
     }
 
   });
