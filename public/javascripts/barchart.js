@@ -94,9 +94,9 @@ $(function () {
 
     };
 
-    set_vars();
-
     async function drawBarchart(geoid) {
+
+        set_vars();
 
         // set the ranges
         var x = d3.scaleTime().range([0, width], .05);
@@ -108,6 +108,8 @@ $(function () {
         var yAxis = d3.axisLeft(y).ticks(10).tickFormat((d, i) => (d).toLocaleString());
 
 
+        d3.select("#barchart").html('')
+        
         // add the SVG element
         var svg = d3.select("#barchart").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -265,7 +267,7 @@ $(function () {
     var current_geoid = null
     async function select_country(geoid, name) {
         current_geoid = geoid
-        drawBarchart(current_geoid);
+        drawBarchart(geoid);
         d3.select('#dropdownMenuButton').html(name)
     }
 
@@ -313,7 +315,6 @@ $(function () {
         resizeTimer = setTimeout(function () {
             var s = d3.selectAll('svg');
             s = s.remove();
-            set_vars();
             drawBarchart(current_geoid);
         }, 100);
     }
