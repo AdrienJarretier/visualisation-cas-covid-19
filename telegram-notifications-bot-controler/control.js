@@ -93,7 +93,7 @@ async function getUpdate(timeout) {
   }
   catch (e) {
 
-    console.log(e);
+    throw e;
 
   }
 
@@ -105,13 +105,22 @@ async function pollUpdates(updateHandler) {
   // console.log((new Date()).toLocaleString());
   // console.log("polling update");
 
-  let results = await getUpdate(1200);
+  try {
 
-  for (let result of results) {
+    let results = await getUpdate(1200);
 
-    last_update_id = result.update_id;
+    for (let result of results) {
 
-    updateHandler(result);
+      last_update_id = result.update_id;
+
+      updateHandler(result);
+
+    }
+
+  }
+  catch (e) {
+
+    console.log()
 
   }
 
