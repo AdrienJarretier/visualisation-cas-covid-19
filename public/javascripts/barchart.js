@@ -8,7 +8,6 @@ function formatDate(date) {
 
 $(function () {
 
-
     $('#tooltip').hide();
 
     function generateGetBoundingClientRect(x = 0, y = 0) {
@@ -97,7 +96,7 @@ $(function () {
 
     set_vars();
 
-    async function drawBarchart() {
+    async function drawBarchart(geoid) {
 
         // set the ranges
         var x = d3.scaleTime().range([0, width], .05);
@@ -123,8 +122,9 @@ $(function () {
             .style("opacity", 0);
 
         // ajax request to GET the data 
+        var data = await d3.json("api/cases/" + geoid);
 
-        var data = await d3.json("api/cases/FR");
+        svg.html('')
 
         data.forEach(function (d) {
             d.date = new Date(d.date);
@@ -257,7 +257,55 @@ $(function () {
 
 
     }
-    drawBarchart();
+
+    // ----------------------- DROP BOX MANAGEMENT
+
+    // -----
+
+    var current_geoid = null
+    async function select_country(geoid, name) {
+        current_geoid = geoid
+        drawBarchart(current_geoid);
+        d3.select('#dropdownMenuButton').html(name)
+    }
+
+    // -----
+
+    function disp_countries(countries) {
+
+        d3.select('menu_items').html('')
+
+        for(let geoid in countries) {
+
+            let c_data = countries[geoid]
+            let name = c_data.name
+
+            d3.select('#dropdown-items').append('a')
+            .attr('href','#')
+            .attr('class','dropdown-item')
+            .html(name)
+            .on('click', function() {
+                select_country(geoid, name)
+            })
+        }
+    }
+
+    // -----
+
+    async function load_countries() {
+
+        let countries = await d3.json("api/countries");
+        
+        disp_countries(countries);
+
+        let first_geoid = Object.keys(countries)[0]
+        let first_name = countries[first_geoid].name
+        select_country(first_geoid, first_name)
+    }
+
+    // ----------------------- MAIN
+
+    load_countries();
 
     var resizeTimer;
     window.onresize = function (event) {
@@ -266,7 +314,7 @@ $(function () {
             var s = d3.selectAll('svg');
             s = s.remove();
             set_vars();
-            drawBarchart();
+            drawBarchart(current_geoid);
         }, 100);
     }
 });
