@@ -95,6 +95,10 @@ async function getUpdate(timeout) {
 
     console.log(e);
 
+    console.log('returning empty');
+
+    return {};
+
   }
 
 }
