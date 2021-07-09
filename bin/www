@@ -79,100 +79,105 @@ telegramNotifier.onStart(function (message) {
 })
 
 
+async function downloadDataAndNotifyTelegramCliens(fireDate) {
+
+  console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
+
+  async function update_cases(geoid) {
+
+    let casesUpdateResult = await updateDb.fillCasesByCountry(geoid);
+
+    console.log(casesUpdateResult.rowsInserted + " rows inserted for country " + geoid);
+
+    let new_data = casesUpdateResult.rowsInserted > 0
+
+    if (new_data) {
+
+
+      let casesDb = new Database(CASES_DB)
+      let stmt = casesDb.prepare("SELECT * from cases INNER JOIN countries ON cases.country=countries.geoid ORDER BY date DESC");
+
+      let casesPastDay = stmt.get()
+
+      casesDb.close();
+
+      console.log(casesPastDay);
+
+      return casesPastDay['cases']
+
+    }
+
+    return 0
+  }
+
+  // --- data
+
+  let countries = {
+    'FRA': 'la France',
+    'DEU': "l'Allemagne"
+  }
+  let news_str_array = []
+  let news_map = {};
+  let total = 0;
+
+  // --- parsing
+
+  for (let geoid in countries) {
+
+    let new_cases = await update_cases(geoid);
+
+    news_map[geoid] = new_cases;
+    total += new_cases
+
+    if (new_cases > 0) {
+      let country_name = countries[geoid]
+      news_str_array.push(' - ' + new_cases + ' nouveaux contaminés pour ' + country_name)
+    }
+
+  }
+
+  // --- send message
+
+  if (total > 0 && TELEGRAM_CLIENTS_ENABLED) {
+
+    const db = new Database(TELEGRAM_CLIENTS_DB);
+
+    stmt = db.prepare("SELECT * from clients");
+
+    let rows = stmt.all();
+
+    console.log("notifying registered clients of new data");
+
+    let message_str = 'http://evolution-coronavirus.tk/ \n' + news_str_array.join('\n');
+
+    console.log(message_str)
+
+    for (let row of rows) {
+
+      telegramNotifier.sendMessage(message_str, row['chat_id']);
+
+    }
+
+    db.close();
+  }
+
+}
+
+
+
 
 
 if (common.serverConfig.scheduleUpdate.enabled) {
 
   console.log();
   console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
-  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, async function (fireDate) {
-
-
-    console.log('db update scheduled to run at ' + fireDate + ' started at ' + new Date());
-
-    async function update_cases(geoid) {
-
-      let casesUpdateResult = await updateDb.fillCasesByCountry(geoid);
-
-      console.log(casesUpdateResult.rowsInserted + " rows inserted for country " + geoid);
-
-      let new_data = casesUpdateResult.rowsInserted > 0
-
-      if (new_data) {
-
-
-        let casesDb = new Database(CASES_DB)
-        let stmt = casesDb.prepare("SELECT * from cases INNER JOIN countries ON cases.country=countries.geoid ORDER BY date DESC");
-
-        let casesPastDay = stmt.get()
-
-        casesDb.close();
-
-        console.log(casesPastDay);
-
-        return casesPastDay['cases']
-
-      }
-
-      return 0
-    }
-
-    // --- data
-
-    let countries = {
-      'FR': 'la France',
-      'DE': "l'Allemagne"
-    }
-    let news_str_array = []
-    let news_map = {};
-    let total = 0;
-
-    // --- parsing
-
-    for(let geoid in countries) {
-
-      let new_cases = await update_cases(geoid);
-
-      news_map[geoid] = new_cases;
-      total += new_cases
-
-      if (new_cases > 0) {
-        let country_name = countries[geoid]
-        news_str_array.push(' - ' + new_cases + ' nouveaux contaminés pour ' + country_name)
-      }
-
-    }
-
-    // --- send message
-    
-    if (total > 0 && TELEGRAM_CLIENTS_ENABLED) {
-
-      const db = new Database(TELEGRAM_CLIENTS_DB);
-
-      stmt = db.prepare("SELECT * from clients");
-
-      let rows = stmt.all();
-
-      console.log("notifying registered clients of new data");
-
-      let message_str = 'http://evolution-coronavirus.tk/ \n' + news_str_array.join('\n');
-
-      console.log(message_str)
-
-      for (let row of rows) {
-
-        telegramNotifier.sendMessage(message_str, row['chat_id']);
-
-      }
-
-      db.close();
-    }
-
-  });
+  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, downloadDataAndNotifyTelegramCliens);
 }
 else {
 
   console.log("scheduled update disabled");
+  
+  downloadDataAndNotifyTelegramCliens("only once");
 
 }
 

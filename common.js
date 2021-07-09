@@ -30,6 +30,7 @@ async function downloadData() {
 
 
         const records = csvParse(res.body.toString(), {
+            bom: true,
             columns: true,
             skip_empty_lines: true
         });
