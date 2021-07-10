@@ -5,7 +5,7 @@ Requirements :
 
 Nodejs 12 : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
-You need a telegram bot to send notifications to clients [https://core.telegram.org/bots](https://core.telegram.org/bots)
+If it is enabled in `localConfig.json`, you need a telegram bot to send notifications to clients [https://core.telegram.org/bots](https://core.telegram.org/bots)
 
 ```bash
 git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
