@@ -171,12 +171,15 @@ if (common.serverConfig.scheduleUpdate.enabled) {
 
   console.log();
   console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
+
+  downloadDataAndNotifyTelegramCliens("only once");
+
   var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, downloadDataAndNotifyTelegramCliens);
 }
 else {
 
   console.log("scheduled update disabled");
-  
+
   downloadDataAndNotifyTelegramCliens("only once");
 
 }

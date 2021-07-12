@@ -12,6 +12,10 @@ git clone https://github.com/AdrienJarretier/visualisation-cas-covid-19.git
 cd visualisation-cas-covid-19
 npm install
 node db/createDb.js
+```
+
+If `telegram-notifications-bot-controler` is enabled in `localConfig.json` you need to set up the database for registering telegram clients :
+```bash
 node telegram-notifications-bot-controler/createDb.js
 ```
 
