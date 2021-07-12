@@ -14,7 +14,8 @@
         },
 
         "scheduleTime": {
-            "minute": 5
+            "hour": 2,
+            "minute": 30
         }
 
     },
