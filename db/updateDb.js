@@ -10,7 +10,7 @@ async function getByCountry(countryGeoId) {
 
     let countryRecords = [];
 
-    for (let record of records) {
+    for (const [date, record] of Object.entries(obj)) {
 
         if (record.country_code.toUpperCase() == countryGeoId.toUpperCase()) {
 
@@ -49,7 +49,7 @@ async function fillCasesByCountry(countryGeoId) {
 
     if (!countryInDb) {
 
-        addCountry(db, countryGeoId, countryRecords[0]['country'])
+        addCountry(db, countryGeoId, Object.values(countryRecords)[0]['country'])
 
     }
 
@@ -62,39 +62,7 @@ async function fillCasesByCountry(countryGeoId) {
     let rowsInserted = 0;
     let lastInsertRowid;
 
-    function getDateOfWeek(w, y) {
-        var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
-
-        return new Date(y, 0, d);
-    }
-
-    let dataToSaveToDb = {}
-
-    for (let record of countryRecords) {
-
-        let year_weak = record.year_week.split('-')
-        let dateTmp = getDateOfWeek(year_weak[1], year_weak[0])
-
-        let year = dateTmp.getFullYear();
-        let month = dateTmp.getMonth();
-        let day = dateTmp.getDate();
-
-        let date = (new Date(Date.UTC(year, month, day))).toJSON();
-
-        if (!(date in dataToSaveToDb)) {
-
-            dataToSaveToDb[date] = {
-                'cases': 0,
-                'deaths': 0
-            }
-
-        }
-
-        dataToSaveToDb[date][record.indicator] = record.weekly_count
-
-    }
-
-    for (const [date, record] of Object.entries(dataToSaveToDb)) {
+    for (const [date, record] of Object.entries(countryRecords)) {
 
         try {
 
