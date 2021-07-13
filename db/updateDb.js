@@ -33,8 +33,8 @@ async function fillCasesByCountry(countryGeoId) {
 
     let countryRecords = await getByCountry(countryGeoId);
 
-    console.log(countryRecords);
-    console.log('----------------countryRecords-----------------');
+    // console.log(countryRecords);
+    // console.log('----------------countryRecords-----------------');
 
     const db = new Database(common.serverConfig.db.database);
 
