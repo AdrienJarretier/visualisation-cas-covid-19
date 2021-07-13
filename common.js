@@ -98,7 +98,7 @@ async function downloadData() {
             skip_empty_lines: true
         });
 
-        return parse14DaysNotificationCases(records);
+        return parseDailyCases(records);
 
     } catch (err) {
 

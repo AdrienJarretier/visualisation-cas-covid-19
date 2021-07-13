@@ -10,7 +10,7 @@ async function getByCountry(countryGeoId) {
 
     let countryRecords = [];
 
-    for (const [date, record] of Object.entries(obj)) {
+    for (const [date, record] of Object.entries(records)) {
 
         if (record.country_code.toUpperCase() == countryGeoId.toUpperCase()) {
 
