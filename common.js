@@ -35,12 +35,18 @@ function parse14DaysNotificationCases(records) {
 
         let date = (new Date(Date.UTC(year, month, day))).toJSON();
 
-        if (!(date in parsedData)) {
+        let countryCode = record.country_code.toUpperCase();
+
+        if (!(countryCode in parsedData)) {
+
+            parsedData[countryCode] = {};
+        };
+
+        if (!(date in parsedData[countryCode])) {
 
             parsedData[date] = {
                 'cases': 0,
                 'deaths': 0,
-                'country_code': record.country_code,
                 'country': record.country
             }
 
@@ -65,11 +71,17 @@ function parseDailyCases(records) {
 
         let date = (new Date(Date.UTC(year, month, day))).toJSON();
 
-        parsedData[date] = {
+        let countryCode = record.countryterritoryCode.toUpperCase();
+
+        if (!(countryCode in parsedData)) {
+
+            parsedData[countryCode] = {};
+        };
+
+        parsedData[countryCode][date] = {
             'cases': record.cases,
             'deaths': record.deaths,
-            'country_code': record.geoId,
-            'country': record.country
+            'country': record.countriesAndTerritories
         }
 
     }

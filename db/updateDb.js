@@ -3,25 +3,18 @@ const common = require('../common.js');
 const Database = require('better-sqlite3');
 
 
+function removeDate(db, date) {
+
+    stmt = db.prepare("DELETE FROM cases WHERE date=?");
+    stmt.run(date);
+
+}
 
 async function getByCountry(countryGeoId) {
 
     let records = await common.downloadData();
 
-    let countryRecords = [];
-
-    for (const [date, record] of Object.entries(records)) {
-
-        if (record.country_code.toUpperCase() == countryGeoId.toUpperCase()) {
-
-            countryRecords.push(record);
-            console.log(record);
-
-        }
-
-    }
-
-    return countryRecords;
+    return records[countryGeoId.toUpperCase()];
 
 }
 
@@ -39,6 +32,9 @@ async function fillCasesByCountry(countryGeoId) {
     countryGeoId = countryGeoId.toUpperCase();
 
     let countryRecords = await getByCountry(countryGeoId);
+
+    console.log(countryRecords);
+    console.log('----------------countryRecords-----------------');
 
     const db = new Database(common.serverConfig.db.database);
 
@@ -75,6 +71,8 @@ async function fillCasesByCountry(countryGeoId) {
 
         }
     }
+
+    removeDate(db, '2021-03-01T00:00:00.000Z');
 
     db.close();
     console.log('cases for country ' + countryGeoId + ' added');
