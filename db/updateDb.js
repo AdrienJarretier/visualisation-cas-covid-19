@@ -53,21 +53,39 @@ async function fillCasesByCountry(countryGeoId) {
     console.log(' - filling cases for country ' + countryGeoId);
 
 
-    stmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
+
+    // inserting new data then updating it, so if it already existed and has changed in the original data it is kept up to date
+    insertStmt = db.prepare("INSERT INTO cases(country, date, cases, deaths) VALUES (?, ?, ?, ?)");
+
+    updateStmt = db.prepare("UPDATE cases SET cases = ?, deaths = ? WHERE country = ? AND date = ?;");
 
     let rowsInserted = 0;
     let lastInsertRowid;
 
     for (const [date, record] of Object.entries(countryRecords)) {
 
+
+        // inserting new data in database
         try {
 
-            const info = stmt.run(countryGeoId, date, record.cases, record.deaths);
+            const info = insertStmt.run(countryGeoId, date, record.cases, record.deaths);
 
             rowsInserted += info.changes;
             lastInsertRowid = info.lastInsertRowid;
 
         } catch (err) {
+
+        }
+
+
+        // updatting old data in case they have been retrospectively updated in the original data
+        try {
+
+            updateStmt.run(record.cases, record.deaths, countryGeoId, date);
+
+        } catch (err) {
+
+            console.log(err);
 
         }
     }
