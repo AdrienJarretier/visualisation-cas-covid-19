@@ -1,5 +1,5 @@
 {
-    "dataBaseUri": "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath/csv/data.csv",
+    "dataBaseUri": "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",
     "db": {
         "database": "db/covid19cases.db"
     },

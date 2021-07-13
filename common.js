@@ -6,13 +6,70 @@ const superagent = require('superagent');
 const local_config_loader = require('env-config-prompt');
 
 const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
-const local_config = local_config_loader(false,'localConfig.json','localConfig_template.json','server config');
+const local_config = local_config_loader(false, 'localConfig.json', 'localConfig_template.json', 'server config');
 
 Object.assign(serverConfig, local_config);
 
 
 console.log(JSON.stringify(serverConfig, null, 4));
 console.log()
+
+function parse14DaysNotificationCases(records) {
+
+    let parsedData = {};
+
+    for (let record of records) {
+
+        let year_weak = record.year_week.split('-')
+        let dateTmp = getDateOfWeek(year_weak[1], year_weak[0])
+
+        let year = dateTmp.getFullYear();
+        let month = dateTmp.getMonth();
+        let day = dateTmp.getDate();
+
+        let date = (new Date(Date.UTC(year, month, day))).toJSON();
+
+        if (!(date in parsedData)) {
+
+            parsedData[date] = {
+                'cases': 0,
+                'deaths': 0,
+                'country_code': record.country_code,
+                'country': record.country
+            }
+
+        }
+
+        parsedData[date][record.indicator] = record.weekly_count
+
+    }
+
+    return parsedData
+}
+
+function parseDailyCases(records) {
+
+    let parsedData = {};
+
+    for (let record of records) {
+
+        let year = record.year;
+        let month = parseInt(record.month) - 1;
+        let day = record.day;
+
+        let date = (new Date(Date.UTC(year, month, day))).toJSON();
+
+        parsedData[date] = {
+            'cases': record.cases,
+            'deaths': record.deaths,
+            'country_code': record.geoId,
+            'country': record.country
+        }
+
+    }
+
+    return parsedData
+}
 
 async function downloadData() {
 
@@ -35,7 +92,7 @@ async function downloadData() {
             skip_empty_lines: true
         });
 
-        return records;
+        return parse14DaysNotificationCases(records);
 
     } catch (err) {
 
