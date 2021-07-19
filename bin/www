@@ -180,7 +180,7 @@ else {
 
   console.log("scheduled update disabled");
 
-  downloadDataAndNotifyTelegramCliens("only once");
+  // downloadDataAndNotifyTelegramCliens("only once");
 
 }
 
