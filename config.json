@@ -1,5 +1,8 @@
 {
     "dataBaseUri": "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",
+    "minTimeBetweenDownloads": {
+        "hours": 6
+    },
     "db": {
         "database": "db/covid19cases.db"
     },
