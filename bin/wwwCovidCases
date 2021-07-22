@@ -12,6 +12,12 @@ const Database = require('better-sqlite3');
 
 var schedule = require('node-schedule');
 
+const fs = require('fs');
+const path = require('path');
+
+
+
+const LAST_UPDATE_DATETIME_FILE_PATH = path.resolve(__dirname, 'lastUpdateDateTime.json');
 
 
 
@@ -78,6 +84,35 @@ telegramNotifier.onStart(function (message) {
 
 })
 
+function getTimeSinceLastUpdateInHours() {
+
+  if (fs.existsSync(LAST_UPDATE_DATETIME_FILE_PATH)) {
+
+    let lastUpdateDateTime = new Date(fs.readFileSync(LAST_UPDATE_DATETIME_FILE_PATH, 'utf8'));
+
+    let timeSinceLastUpdateMs = (new Date()) - lastUpdateDateTime;
+    let timeSinceLastUpdateHours = timeSinceLastUpdateMs / 3600000; // from ms to hours 1000 * 3600
+
+    return timeSinceLastUpdateHours;
+
+  } else {
+
+    return Infinity;
+
+  }
+
+}
+
+
+function saveLastUpdateDateTime() {
+
+  let dateTime = (new Date()).toJSON();
+
+  console.log('writing "' + dateTime + '" to ' + LAST_UPDATE_DATETIME_FILE_PATH);
+
+  fs.writeFileSync(LAST_UPDATE_DATETIME_FILE_PATH, dateTime);
+
+}
 
 async function downloadDataAndNotifyTelegramCliens(fireDate) {
 
@@ -163,8 +198,18 @@ async function downloadDataAndNotifyTelegramCliens(fireDate) {
 
 }
 
+function downloadDataIfLongTimeElapsed() {
 
+  let timeSinceLastUpdateHours = getTimeSinceLastUpdateInHours();
+  console.log('time since last update :', timeSinceLastUpdateHours, 'h');
 
+  if (timeSinceLastUpdateHours > common.serverConfig.minTimeBetweenDownloads.hours) {
+    downloadDataAndNotifyTelegramCliens("only once");
+  }
+
+  saveLastUpdateDateTime();
+
+}
 
 
 if (common.serverConfig.scheduleUpdate.enabled) {
@@ -172,15 +217,15 @@ if (common.serverConfig.scheduleUpdate.enabled) {
   console.log();
   console.log("enabling scheduled update at " + JSON.stringify(common.serverConfig.scheduleUpdate.scheduleTime));
 
-  // downloadDataAndNotifyTelegramCliens("only once");
+  downloadDataIfLongTimeElapsed();
 
-  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, downloadDataAndNotifyTelegramCliens);
+  var j = schedule.scheduleJob(common.serverConfig.scheduleUpdate.scheduleTime, downloadDataIfLongTimeElapsed);
 }
 else {
 
   console.log("scheduled update disabled");
 
-  // downloadDataAndNotifyTelegramCliens("only once");
+  downloadDataIfLongTimeElapsed();
 
 }
 
