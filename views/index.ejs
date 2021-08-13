@@ -6,7 +6,8 @@
       include('partials/head.ejs')
     %>
 
-  <script type="module" src="javascripts/barchart.js"></script>
+  <script src="/extLibs/chart.js/chart.js-3.5.0.min.js"></script>
+  <script src="/javascripts/barchart.js"></script>
 </head>
 
 <body>
@@ -32,7 +33,10 @@
 
   <div id="tooltip" role="tooltip"></div>
 
-  <div id="barchart"></div>
+  
+  <div>
+    <canvas id="barchart"></canvas>
+  </div>
 
   <%- 
   

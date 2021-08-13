@@ -1,5 +1,3 @@
-import {Chart} from '/extLibs/chart.js/chart.js-3.5.0.min.js';
-
 // const seed = JSON.parse(localStorage.getItem('seed')) || Random.createEntropy();
 // console.log(seed);
 
@@ -78,7 +76,7 @@ $(function () {
     };
 
     const myChart = new Chart(
-        $('#myChart'),
+        $('#barchart'),
         config
     );
 
