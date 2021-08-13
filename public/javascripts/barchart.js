@@ -1,3 +1,5 @@
+import { computeMovingAvg } from './statsCalculations.js';
+
 // const seed = JSON.parse(localStorage.getItem('seed')) || Random.createEntropy();
 // console.log(seed);
 
@@ -10,31 +12,6 @@ function rand() {
 
     // const distribution = Random.real(0, 1);
     // return distribution(mt);
-
-}
-
-function computeMovingAvg(rawValues, windowSize) {
-
-    movingAvgData = [];
-
-    let AVG_START = Math.floor(-(windowSize - 1) / 2);
-    let AVG_STOP = Math.floor((windowSize - 1) / 2);
-
-    for (let i = 0; i < -AVG_START; ++i) {
-        movingAvgData.push(null);
-    }
-
-    for (let i = -AVG_START; i < rawValues.length - AVG_STOP; ++i) {
-
-        let sum = 0;
-        for (let j = i + AVG_START; j < i + AVG_STOP + 1; ++j) {
-
-            sum += rawValues[j];
-        }
-        movingAvgData.push(sum / (1 + AVG_STOP - AVG_START));
-    }
-
-    return movingAvgData;
 
 }
 
@@ -75,6 +52,15 @@ $(function () {
         labels.push(i + 1);
     }
 
+    const rawDataset = {
+        type: 'bar',
+        label: 'My First dataset',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgb(255, 99, 132, 0.9)',
+        data: rawValues,
+        borderWidth: 1,
+    };
+
     let movingAvgDataset = {
         type: 'line',
         label: '',
@@ -85,14 +71,7 @@ $(function () {
 
     const data = {
         labels: labels,
-        datasets: [movingAvgDataset, {
-            type: 'bar',
-            label: 'My First dataset',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            borderColor: 'rgb(255, 99, 132, 0.9)',
-            data: rawValues,
-            borderWidth: 1,
-        }]
+        datasets: [movingAvgDataset, rawDataset]
     };
 
     const config = {
@@ -104,8 +83,6 @@ $(function () {
         $('#barchart'),
         config
     );
-
-
 
     function handleWindowSizeSelectorChange(windowSize) {
 
