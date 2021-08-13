@@ -13,6 +13,31 @@ function rand() {
 
 }
 
+function computeMovingAvg(rawValues, windowSize) {
+
+    movingAvgData = [];
+
+    let AVG_START = Math.floor(-(windowSize - 1) / 2);
+    let AVG_STOP = Math.floor((windowSize - 1) / 2);
+
+    for (let i = 0; i < -AVG_START; ++i) {
+        movingAvgData.push(null);
+    }
+
+    for (let i = -AVG_START; i < rawValues.length - AVG_STOP; ++i) {
+
+        let sum = 0;
+        for (let j = i + AVG_START; j < i + AVG_STOP + 1; ++j) {
+
+            sum += rawValues[j];
+        }
+        movingAvgData.push(sum / (1 + AVG_STOP - AVG_START));
+    }
+
+    return movingAvgData;
+
+}
+
 $(function () {
 
     const VALUES_COUNT = 100;
@@ -80,36 +105,18 @@ $(function () {
         config
     );
 
-    function computeMovingAvg() {
 
-        let WINDOW_SIZE = $('#windowWiseSelector').val();
 
-        movingAvgDataset.label = 'Moving Average, k = ' + WINDOW_SIZE;
-        movingAvgDataset.data = [];
+    function handleWindowSizeSelectorChange(windowSize) {
 
-        let AVG_START = Math.floor(-(WINDOW_SIZE - 1) / 2);
-        let AVG_STOP = Math.floor((WINDOW_SIZE - 1) / 2);
-
-        for (let i = 0; i < -AVG_START; ++i) {
-            movingAvgDataset.data.push(null);
-        }
-
-        for (let i = -AVG_START; i < rawValues.length - AVG_STOP; ++i) {
-
-            let sum = 0;
-            for (let j = i + AVG_START; j < i + AVG_STOP + 1; ++j) {
-
-                sum += rawValues[j];
-            }
-            movingAvgDataset.data.push(sum / (1 + AVG_STOP - AVG_START));
-        }
+        movingAvgDataset.data = computeMovingAvg(rawValues, windowSize);
+        movingAvgDataset.label = 'Moving Average, k = ' + windowSize;
 
         myChart.update();
-
     }
 
-    $('#windowWiseSelector').change(computeMovingAvg);
+    $('#windowWiseSelector').change(function () { handleWindowSizeSelectorChange($(this).val()) });
 
-    computeMovingAvg();
+    handleWindowSizeSelectorChange($('#windowWiseSelector').val());
 
 });
