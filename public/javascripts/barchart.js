@@ -6,7 +6,7 @@
 // const mt = Random.MersenneTwister19937.seedWithArray(seed);
 
 function rand() {
-    return Math.round(Math.random());
+    return Math.random();
 
     // const distribution = Random.real(0, 1);
     // return distribution(mt);
