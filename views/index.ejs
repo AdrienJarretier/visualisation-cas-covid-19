@@ -2,19 +2,20 @@
 <html>
 
 <head lang="fr">
-  <%-
-      include('partials/head.ejs')
-    %>
+  <%- include('partials/head.ejs') %>
 
-  <script src="/extLibs/chart.js/chart.js-3.5.0.min.js"></script>
-  <script src="/javascripts/barchart.js"></script>
+    <script src="/extLibs/chart.js/chart.js-3.5.0.min.js"></script>
+    <script src="/javascripts/barchart.js"></script>
 </head>
 
 <body>
-  <h1><%= globalTitle %></h1>
+  <h1>
+    <%= globalTitle %>
+  </h1>
 
   <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       Chargement ...
     </button>
@@ -33,16 +34,12 @@
 
   <div id="tooltip" role="tooltip"></div>
 
-  
+
   <div>
     <canvas id="barchart"></canvas>
   </div>
 
-  <%- 
-  
-    include('partials/footer.ejs')
-  
-  %>
+  <%- include('partials/footer.ejs') %>
 </body>
 
 </html>
