@@ -17,3 +17,5 @@ async function get(uri) {
     }
 
 }
+
+export { get };
