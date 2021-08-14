@@ -31,7 +31,7 @@
         for (let i = 1; i < VALUES_COUNT; ++i) {
 
           let tmpvValS = []
-          for (let j = 0; j < 20; ++j) {
+          for (let j = 0; j < 10; ++j) {
 
             tmpvValS.push(rand(0, MAX_RAW_VAL));
 
@@ -84,7 +84,7 @@
 
 </head>
 
-<body>
+<body class="bg-dark text-white">
 
   <div class="container">
 
@@ -129,8 +129,6 @@
     <div class="row my-3">
       <div class="col">
         <input type="number" min="1" id="windowSizeSelector" value="1">
-
-        <button type="button" id="shiftButton">Shift data</button>
       </div>
     </div>
 

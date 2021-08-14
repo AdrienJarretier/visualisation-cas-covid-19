@@ -1,8 +1,8 @@
-body {
+/* body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
+} */
+/* 
 a {
   color: #00B7FF;
 }
@@ -73,7 +73,10 @@ footer {
 .custom-control-input ~ .custom-control-label::before,
 .custom-control-input:checked ~ .custom-control-label::after {
   box-shadow: none !important; 
-}
+} */
+
+
+
 
 .withInlineLogo {
   padding-left: 1.8em;

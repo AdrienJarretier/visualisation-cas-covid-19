@@ -8,11 +8,14 @@ class CustomChart {
 
         this.movingAvgWindowSize = 1;
 
+        let barChartColor = '#4589ff';
+        let movingAverageChartColor = '#bae6ff';
+
         this.barChartConfig = {
             type: 'bar',
             label: 'My First dataset',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            borderColor: 'rgb(255, 99, 132, 0.9)',
+            backgroundColor: barChartColor,
+            borderColor: barChartColor,
             data: null,
             borderWidth: 1,
         };
@@ -20,8 +23,8 @@ class CustomChart {
         this.movingAvgConfig = {
             type: 'line',
             label: '',
-            backgroundColor: 'rgb(0, 0, 0)',
-            borderColor: 'rgb(0, 0, 0)',
+            backgroundColor: movingAverageChartColor,
+            borderColor: movingAverageChartColor,
             data: null,
         };
 
@@ -30,9 +33,30 @@ class CustomChart {
             datasets: [this.movingAvgConfig, this.barChartConfig]
         };
 
+        const gridColor = 'rgb(94, 102, 109)';
+
         let config = {
             data: this.data,
-            options: {}
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                            borderColor: gridColor,
+                            color: gridColor,
+                            tickColor: gridColor
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false,
+                            borderColor: gridColor,
+                            color: gridColor,
+                            tickColor: gridColor
+                        }
+                    }
+                }
+            }
         };
 
         let canvas = $(canvasId);
