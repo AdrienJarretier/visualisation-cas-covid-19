@@ -24,6 +24,14 @@
 
         load_countries(customChart);
 
+        // let scaleSwitch = $("#logCheckbox")[0];
+
+        $("#logCheckbox").change(function () {
+
+          customChart.setScaleLog($(this).prop('checked'));
+
+        });
+
       });
 
     </script>

@@ -35,7 +35,7 @@ class CustomChart {
 
         const gridColor = 'rgb(94, 102, 109)';
 
-        let config = {
+        this.config = {
             data: this.data,
             options: {
                 scales: {
@@ -63,7 +63,7 @@ class CustomChart {
 
         this._chart = new Chart(
             canvas,
-            config
+            this.config
         );
 
     }
@@ -85,6 +85,11 @@ class CustomChart {
         this.barChartConfig.data = data;
         this.data.labels = xTicksLabels;
         this.setMovingAvgWindowSize(movingAvgWindowSize);
+    }
+
+    setScaleLog(logBool) {
+        this.config.options.scales.y.type = (logBool ? 'logarithmic' : 'linear');
+        this._chart.update();
     }
 }
 
