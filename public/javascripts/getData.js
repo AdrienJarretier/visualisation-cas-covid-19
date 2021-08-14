@@ -1,13 +1,25 @@
 import { get } from './utils.js';
 
-function getCases(geoid) {
-
-    return get('api/cases/' + geoid);
-}
-
-async function select_country(geoid, name) {
+async function select_country(geoid, name, customChart) {
 
     $('#countriesDropdown button').text(name);
+
+    const cases = await get('api/cases/' + geoid);
+
+    let data = [];
+    let xTicksLabels = [];
+
+    for (let c of cases) {
+        data.push(c.cases);
+
+        var options = { month: 'short', day: 'numeric', weekday:'short' };
+
+        xTicksLabels.push((new Date(c.date)).toLocaleDateString('default', options));
+    }
+
+    console.log(xTicksLabels);
+
+    customChart.setData(data, xTicksLabels);
 }
 
 function disp_countries(countries) {
@@ -32,7 +44,7 @@ function disp_countries(countries) {
     }
 }
 
-async function load_countries() {
+async function load_countries(customChart) {
 
     let countries = await get("api/countries");
 
@@ -40,7 +52,7 @@ async function load_countries() {
     let first_geoid = Object.keys(countries)[0];
     let first_name = countries[first_geoid].name;
 
-    select_country(first_geoid, first_name);
+    select_country(first_geoid, first_name, customChart);
 }
 
 export { load_countries };
