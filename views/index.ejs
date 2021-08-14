@@ -5,14 +5,80 @@
   <%- include('partials/head.ejs') %>
 
     <script src="/extLibs/chart.js/chart.js-3.5.0.min.js"></script>
-    <script type="module" src="/javascripts/barchart.js"></script>
+
+    <script>
+
+      function rand() {
+        return Math.random();
+      }
+
+      function getRandomData() {
+
+        const VALUES_COUNT = 100;
+
+        let rawValues = [];
+
+        const labels = [];
+
+        const MAX_RAW_VAL = 5;
+
+        for (let i = 0; i < 1; ++i) {
+
+          rawValues.push(rand(0, MAX_RAW_VAL));
+          labels.push(i + 1);
+        }
+
+        for (let i = 1; i < VALUES_COUNT; ++i) {
+
+          let tmpvValS = []
+          for (let j = 0; j < 20; ++j) {
+
+            tmpvValS.push(rand(0, MAX_RAW_VAL));
+
+          }
+          // console.log(tmpvValS);
+
+          tmpvValS.sort((a, b) => {
+            return Math.abs(a - rawValues[i - 1]) - Math.abs(b - rawValues[i - 1]);
+          });
+
+          // console.log(tmpvValS);
+
+          rawValues.push(tmpvValS[0]);
+
+          labels.push(i + 1);
+        }
+
+        return [rawValues, labels];
+      }
+
+    </script>
 
     <script type="module">
 
       import { load_countries } from "/javascripts/getData.js";
 
-      let countries = await load_countries();
-      console.log(countries);
+      import CustomChart from "/javascripts/CustomChart.js";
+
+      function rand() {
+        return Math.random();
+      }
+
+      $(async function () {
+
+        let customChart = new CustomChart('#barchart');
+
+        let randomData = getRandomData();
+        customChart.setData(randomData[0], randomData[1], $('#windowSizeSelector').val());
+
+        $('#windowSizeSelector').change(function () {
+          customChart.setMovingAvgWindowSize($(this).val());
+        });
+
+        let countries = await load_countries();
+        console.log(countries);
+
+      });
 
     </script>
 
@@ -62,7 +128,7 @@
 
     <div class="row my-3">
       <div class="col">
-        <input type="number" min="1" id="windowWiseSelector" value="1">
+        <input type="number" min="1" id="windowSizeSelector" value="1">
 
         <button type="button" id="shiftButton">Shift data</button>
       </div>
