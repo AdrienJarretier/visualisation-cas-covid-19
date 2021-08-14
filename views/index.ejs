@@ -15,11 +15,12 @@
       $(async function () {
 
         let customChart = new CustomChart('#barchart');
+        customChart.setMovingAvgWindowSize(7);
 
-        $('#windowSizeSelector').change(function () {
-          customChart.setMovingAvgWindowSize($(this).val());
-        });
-        customChart.setMovingAvgWindowSize($('#windowSizeSelector').val());
+        // $('#windowSizeSelector').change(function () {
+        //   customChart.setMovingAvgWindowSize($(this).val());
+        // });
+        // customChart.setMovingAvgWindowSize($('#windowSizeSelector').val());
 
         load_countries(customChart);
 
@@ -71,11 +72,11 @@
       </div>
     </div>
 
-    <div class="row my-3">
+    <!-- <div class="row my-3">
       <div class="col">
         <input type="number" min="1" id="windowSizeSelector" value="1">
       </div>
-    </div>
+    </div> -->
 
     <div class="row my-3">
       <div class="col">

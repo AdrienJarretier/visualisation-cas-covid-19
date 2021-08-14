@@ -17,12 +17,10 @@ async function select_country(geoid, name, customChart) {
         xTicksLabels.push((new Date(c.date)).toLocaleDateString('default', options));
     }
 
-    console.log(xTicksLabels);
-
     customChart.setData(data, xTicksLabels);
 }
 
-function disp_countries(countries) {
+function disp_countries(countries, customChart) {
 
     let countriesDropsown = $('#countriesDropdown ul');
 
@@ -36,7 +34,7 @@ function disp_countries(countries) {
                 $('<a class="dropdown-item" href="#">')
                     .text(name)
                     .click(function () {
-                        select_country(geoid, name)
+                        select_country(geoid, name, customChart)
                     })
             );
 
@@ -48,7 +46,7 @@ async function load_countries(customChart) {
 
     let countries = await get("api/countries");
 
-    disp_countries(countries);
+    disp_countries(countries, customChart);
     let first_geoid = Object.keys(countries)[0];
     let first_name = countries[first_geoid].name;
 

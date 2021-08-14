@@ -13,7 +13,7 @@ class CustomChart {
 
         this.barChartConfig = {
             type: 'bar',
-            label: 'My First dataset',
+            label: 'Nombre de cas',
             backgroundColor: barChartColor,
             borderColor: barChartColor,
             data: null,
@@ -73,7 +73,7 @@ class CustomChart {
         this.movingAvgWindowSize = value;
 
         this.movingAvgConfig.data = computeMovingAvg(this.barChartConfig.data, value);
-        this.movingAvgConfig.label = 'Moving Average, k = ' + value;
+        this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
 
         this._chart.update();
     }
