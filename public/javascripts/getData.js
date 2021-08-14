@@ -6,7 +6,7 @@ function getCases(geoid) {
 }
 
 async function select_country(geoid, name) {
-    // drawBarchart(geoid);
+
     $('#countriesDropdown button').text(name);
 }
 
@@ -37,9 +37,10 @@ async function load_countries() {
     let countries = await get("api/countries");
 
     disp_countries(countries);
-    let first_geoid = Object.keys(countries)[0]
-    let first_name = countries[first_geoid].name
-    select_country(first_geoid, first_name)
+    let first_geoid = Object.keys(countries)[0];
+    let first_name = countries[first_geoid].name;
+
+    select_country(first_geoid, first_name);
 }
 
 export { load_countries };
