@@ -2,34 +2,36 @@ function computeMovingAvg(rawValues, windowSize) {
 
     let movingAvgData = [];
 
-    let AVG_START = Math.floor(-(windowSize - 1) / 2);
-    let AVG_STOP = Math.floor((windowSize - 1) / 2);
-
     let sum = 0;
 
-    for (let i = 0; i < rawValues.length; ++i) {
+    let AVG_START = 0;
+    let AVG_STOP = Math.floor((windowSize - 1) / 2);
 
-        let AVG_START = i + Math.floor(-(windowSize - 1) / 2);
-        let AVG_STOP = i + Math.floor((windowSize - 1) / 2);
+    for (let j = AVG_START; j < AVG_STOP + 1; ++j) {
 
-    }
-
-    for (let j = 0; j < AVG_STOP; ++j) {
         sum += rawValues[j];
     }
 
-    for (let i = 0; i < -AVG_START; ++i) {
-        movingAvgData.push(null);
+    movingAvgData.push(sum / (AVG_STOP - AVG_START + 1));
+
+    function increment() {
+        const MAX_STOP = rawValues.length - 1;
+
+        if (AVG_STOP + 1 - AVG_START >= windowSize || AVG_STOP == MAX_STOP) {
+            sum -= rawValues[AVG_START];
+            ++AVG_START;
+        }
+
+        if (AVG_STOP < MAX_STOP) {
+            ++AVG_STOP;
+            sum += rawValues[AVG_STOP];
+        }
+
+        movingAvgData.push(sum / (AVG_STOP - AVG_START + 1));
     }
 
-    for (let i = -AVG_START; i < rawValues.length - AVG_STOP; ++i) {
-
-        let sum = 0;
-        for (let j = i + AVG_START; j < i + AVG_STOP + 1; ++j) {
-
-            sum += rawValues[j];
-        }
-        movingAvgData.push(sum / (1 + AVG_STOP - AVG_START));
+    for (let i = 1; i < rawValues.length; ++i) {
+        increment();
     }
 
     return movingAvgData;
