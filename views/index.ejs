@@ -49,13 +49,6 @@
           ++i;
         }
 
-        // windowSizeSelector.change(function () {
-        //   customChart.setMovingAvgWindowSize($(this).val());
-        // });
-        // customChart.setMovingAvgWindowSize(windowSizeSelector.val());
-
-        // $('#windowSizeSelectorDiv').append(windowSizeSelector);
-
       }
 
     </script>
@@ -73,8 +66,6 @@
 
         load_countries(customChart);
 
-        // let scaleSwitch = $("#logCheckbox")[0];
-
         $('#logCheckbox').change(function () {
 
           customChart.setScaleLog($(this).prop('checked'));
@@ -83,6 +74,17 @@
         customChart.setScaleLog($('#logCheckbox').prop('checked'));
 
         appendWindowdSizeSelectorRadios(customChart);
+
+
+        $('#checkboxZoomLastMonth').change(function () {
+
+          if ($(this).prop('checked'))
+            customChart.setZoomLastDays(36);
+          else
+            customChart.setZoomLastDays(null);
+
+        });
+        // customChart.setMin($('#checkboxZoomLastMonth').prop('checked'));
 
       });
 
@@ -146,10 +148,10 @@
 
     <div class="row mb-3">
 
-      <div class="col">
-        <div class="form-check form-switch">
+      <div class="col position-relative">
+        <div class="form-check form-switch position-absolute end-0">
           <input class="form-check-input" type="checkbox" id="checkboxZoomLastMonth">
-          <label class="form-check-label" for="checkboxZoomLastMonth">zoom 30 jours</label>
+          <label class="form-check-label" for="checkboxZoomLastMonth">zoom 36 jours</label>
         </div>
       </div>
     </div>
