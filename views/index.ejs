@@ -6,6 +6,60 @@
 
     <script src="/extLibs/chart.js/chart.js-3.5.0.min.js"></script>
 
+    <script>
+
+      function appendWindowdSizeSelector(customChart) {
+
+        let windowSizeSelector = $('<input type="number" min="1" value="1">');
+
+        windowSizeSelector.change(function () {
+          customChart.setMovingAvgWindowSize($(this).val());
+        });
+        customChart.setMovingAvgWindowSize(windowSizeSelector.val());
+
+        $('#windowSizeSelectorDiv').append(windowSizeSelector);
+
+      }
+
+      function appendWindowdSizeSelectorRadios(customChart) {
+
+        let i = 0;
+        for (let windowSize of [7, 36]) {
+
+          let radioId = 'windowSizeRadio' + i;
+
+          let radio = $('<input type="radio" class="btn-check" name="windowSize" autocomplete="off">')
+            .val(windowSize)
+            .attr('id', radioId)
+            .change(function () {
+
+              console.log($(this).val());
+              customChart.setMovingAvgWindowSize($(this).val());
+
+            });
+
+          let label = $('<label class="btn btn-secondary mx-1">')
+            .attr('for', radioId)
+            .text(windowSize);
+
+          $('#windowSizeSelectorDiv')
+            .append(radio)
+            .append(label);
+
+          ++i;
+        }
+
+        // windowSizeSelector.change(function () {
+        //   customChart.setMovingAvgWindowSize($(this).val());
+        // });
+        // customChart.setMovingAvgWindowSize(windowSizeSelector.val());
+
+        // $('#windowSizeSelectorDiv').append(windowSizeSelector);
+
+      }
+
+    </script>
+
     <script type="module">
 
       import { load_countries } from "/javascripts/getData.js";
@@ -17,21 +71,18 @@
         let customChart = new CustomChart('#barchart');
         customChart.setMovingAvgWindowSize(7);
 
-        // $('#windowSizeSelector').change(function () {
-        //   customChart.setMovingAvgWindowSize($(this).val());
-        // });
-        // customChart.setMovingAvgWindowSize($('#windowSizeSelector').val());
-
         load_countries(customChart);
 
         // let scaleSwitch = $("#logCheckbox")[0];
 
-        $("#logCheckbox").change(function () {
+        $('#logCheckbox').change(function () {
 
           customChart.setScaleLog($(this).prop('checked'));
 
         });
-        customChart.setScaleLog($("#logCheckbox").prop('checked'));
+        customChart.setScaleLog($('#logCheckbox').prop('checked'));
+
+        appendWindowdSizeSelectorRadios(customChart);
 
       });
 
@@ -79,13 +130,13 @@
       </div>
     </div>
 
-    <!-- <div class="row my-3">
-      <div class="col">
-        <input type="number" min="1" id="windowSizeSelector" value="1">
-      </div>
-    </div> -->
-
     <div class="row mt-3">
+      <div class="col" id="windowSizeSelectorDiv">
+        Fenêtre moyenne glissante
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col">
 
         <canvas id="barchart"></canvas>

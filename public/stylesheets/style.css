@@ -83,3 +83,9 @@ footer {
   background-size: auto 100%;
   background-repeat: no-repeat;
 }
+
+#windowSizeSelectorDiv .btn{
+
+  width: 50px;
+
+}
