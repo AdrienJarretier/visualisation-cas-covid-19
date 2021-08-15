@@ -1,3 +1,5 @@
+'use strict';
+
 function computeMovingAvg(rawValues, windowSize) {
 
     let movingAvgData = [];
@@ -94,8 +96,6 @@ function computeWeightedMovingAvg(rawValues, windowSize) {
             ++AVG_STOP;
         }
     }
-
-    console.log(rawValues);
 
     for (let i = 0; i < rawValues.length; ++i) {
         increment(i);

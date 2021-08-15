@@ -1,7 +1,7 @@
 'use strict';
 
 import { computeMovingAvg } from '/javascripts/statsCalculations.js';
-
+import { computeWeightedMovingAvg } from '/javascripts/statsCalculations.js';
 
 class CustomChart {
 
@@ -15,6 +15,7 @@ class CustomChart {
 
         let barChartColor = '#4589ff';
         let movingAverageChartColor = '#bae6ff';
+        let movingWeightedAverageChartColor = '#fbdcac';
 
         this.barChartConfig = {
             type: 'bar',
@@ -33,9 +34,18 @@ class CustomChart {
             data: null,
         };
 
+
+        this.movingWeightedAvgConfig = {
+            type: 'line',
+            label: '',
+            backgroundColor: movingWeightedAverageChartColor,
+            borderColor: movingWeightedAverageChartColor,
+            data: null,
+        };
+
         this.data = {
             labels: null,
-            datasets: [this.movingAvgConfig, this.barChartConfig]
+            datasets: [this.movingAvgConfig, this.movingWeightedAvgConfig, this.barChartConfig]
         };
 
         const gridColor = 'rgb(94, 102, 109)';
@@ -84,11 +94,14 @@ class CustomChart {
     }
 
     setMovingAvgWindowSize(value) {
-
+        value = parseInt(value);
         this.movingAvgWindowSize = value;
 
         this.movingAvgConfig.data = computeMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
+
+        this.movingWeightedAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
+        this.movingWeightedAvgConfig.label = 'Moyenne glissante pondérée sur ' + value + ' jours';
 
         this._update();
     }
