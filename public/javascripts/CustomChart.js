@@ -35,17 +35,17 @@ class CustomChart {
         };
 
 
-        this.movingWeightedAvgConfig = {
-            type: 'line',
-            label: '',
-            backgroundColor: movingWeightedAverageChartColor,
-            borderColor: movingWeightedAverageChartColor,
-            data: null,
-        };
+        // this.movingWeightedAvgConfig = {
+        //     type: 'line',
+        //     label: '',
+        //     backgroundColor: movingWeightedAverageChartColor,
+        //     borderColor: movingWeightedAverageChartColor,
+        //     data: null,
+        // };
 
         this.data = {
             labels: null,
-            datasets: [this.movingAvgConfig, this.movingWeightedAvgConfig, this.barChartConfig]
+            datasets: [this.movingAvgConfig, this.barChartConfig]
         };
 
         const gridColor = 'rgb(94, 102, 109)';
@@ -97,11 +97,11 @@ class CustomChart {
         value = parseInt(value);
         this.movingAvgWindowSize = value;
 
-        this.movingAvgConfig.data = computeMovingAvg(this.barChartConfig.data, value);
+        this.movingAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
 
-        this.movingWeightedAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
-        this.movingWeightedAvgConfig.label = 'Moyenne glissante pondérée sur ' + value + ' jours';
+        // this.movingWeightedAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
+        // this.movingWeightedAvgConfig.label = 'Moyenne glissante pondérée sur ' + value + ' jours';
 
         this._update();
     }
