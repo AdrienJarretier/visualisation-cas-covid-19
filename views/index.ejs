@@ -57,9 +57,12 @@
 
       import { load_countries } from "/javascripts/getData.js";
 
+
       import CustomChart from "/javascripts/CustomChart.js";
 
       $(async function () {
+
+
 
         let customChart = new CustomChart('#barchart');
         customChart.setMovingAvgWindowSize(7);
@@ -90,6 +93,12 @@
         handleZoomSwitch();
 
       });
+
+    </script>
+
+    <script type="module">
+      import { computeWeightedMovingAvg } from '/javascripts/statsCalculations.js';
+      console.log(computeWeightedMovingAvg([2, 4, 1, 3, 4, 5, 6, 7, 8, 9], 4));
 
     </script>
 

@@ -2,6 +2,7 @@
 
 import { computeMovingAvg } from '/javascripts/statsCalculations.js';
 
+
 class CustomChart {
 
     constructor(canvasId) {

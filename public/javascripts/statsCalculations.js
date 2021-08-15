@@ -38,4 +38,71 @@ function computeMovingAvg(rawValues, windowSize) {
 
 }
 
-export { computeMovingAvg };
+
+// returns the weights, tha indices reppresenting the distance from current point
+function getWeights(windowSize) {
+
+    let weights = [Math.floor((windowSize + 2) / 2)]
+
+    for (let i = 1; i <= weights[0] - 1; i++) {
+        weights.push(weights[i - 1] - 1);
+    }
+
+    return weights;
+
+}
+
+
+function computeWeightedMovingAvg(rawValues, windowSize) {
+
+    const MAX_STOP = rawValues.length - 1;
+
+    let movingAvgData = [];
+
+    let sum = 0;
+
+    let AVG_START = 0;
+    let AVG_STOP = Math.floor((windowSize - 1) / 2);
+
+    let weights = getWeights(windowSize);
+
+    function weighted_avg(start, stop, position) {
+
+        let weights_sum = 0;
+        let w_j;
+        sum = 0;
+
+        for (let j = start; j < stop + 1; ++j) {
+            w_j = weights[Math.abs(position - j)];
+            sum += rawValues[j] * w_j;
+            weights_sum += w_j;
+        }
+
+        return sum / weights_sum;
+
+    }
+
+    function increment(i) {
+
+        movingAvgData.push(weighted_avg(AVG_START, AVG_STOP, i));
+
+        if (AVG_STOP + 1 - AVG_START >= windowSize || AVG_STOP == MAX_STOP) {
+            ++AVG_START;
+        }
+
+        if (AVG_STOP < MAX_STOP) {
+            ++AVG_STOP;
+        }
+    }
+
+    console.log(rawValues);
+
+    for (let i = 0; i < rawValues.length; ++i) {
+        increment(i);
+    }
+
+    return movingAvgData;
+
+}
+
+export { computeMovingAvg, computeWeightedMovingAvg };
