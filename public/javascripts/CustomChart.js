@@ -34,15 +34,6 @@ class CustomChart {
             data: null,
         };
 
-
-        // this.movingWeightedAvgConfig = {
-        //     type: 'line',
-        //     label: '',
-        //     backgroundColor: movingWeightedAverageChartColor,
-        //     borderColor: movingWeightedAverageChartColor,
-        //     data: null,
-        // };
-
         this.data = {
             labels: null,
             datasets: [this.movingAvgConfig, this.barChartConfig]
@@ -99,9 +90,6 @@ class CustomChart {
 
         this.movingAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
-
-        // this.movingWeightedAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
-        // this.movingWeightedAvgConfig.label = 'Moyenne glissante pondérée sur ' + value + ' jours';
 
         this._update();
     }
