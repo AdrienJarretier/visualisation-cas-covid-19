@@ -8,6 +8,10 @@ class CustomChart {
 
         this.movingAvgWindowSize = 1;
 
+        this.zoom = {
+            days: null
+        };
+
         let barChartColor = '#4589ff';
         let movingAverageChartColor = '#bae6ff';
 
@@ -68,6 +72,16 @@ class CustomChart {
 
     }
 
+    _update() {
+
+        if (this.zoom.days)
+            this.config.options.scales.x.min = this.data.labels.length - this.zoom.days;
+        else
+            this.config.options.scales.x.min = null;
+
+        this._chart.update();
+    }
+
     setMovingAvgWindowSize(value) {
 
         this.movingAvgWindowSize = value;
@@ -75,7 +89,7 @@ class CustomChart {
         this.movingAvgConfig.data = computeMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
 
-        this._chart.update();
+        this._update();
     }
 
     setData(data, xTicksLabels, movingAvgWindowSize) {
@@ -89,7 +103,18 @@ class CustomChart {
 
     setScaleLog(logBool) {
         this.config.options.scales.y.type = (logBool ? 'logarithmic' : 'linear');
-        this._chart.update();
+        this._update();
+    }
+
+    /**
+     * Zoom on the n last days
+     * @param {number} n Nomber of days to zoom in 
+     */
+    setZoomLastDays(n) {
+
+        this.zoom.days = n;
+        this._update();
+
     }
 }
 
