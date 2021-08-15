@@ -75,16 +75,19 @@
 
         appendWindowdSizeSelectorRadios(customChart);
 
+        const ZOOOM_DAYS = 36;
+        $('#labelZoomLastMonth').text('zoom ' + ZOOOM_DAYS + ' jours');
+        function handleZoomSwitch() {
 
-        $('#checkboxZoomLastMonth').change(function () {
-
-          if ($(this).prop('checked'))
-            customChart.setZoomLastDays(36);
+          if ($('#checkboxZoomLastMonth').prop('checked'))
+            customChart.setZoomLastDays(ZOOOM_DAYS);
           else
             customChart.setZoomLastDays(null);
 
-        });
-        // customChart.setMin($('#checkboxZoomLastMonth').prop('checked'));
+        }
+
+        $('#checkboxZoomLastMonth').change(handleZoomSwitch);
+        handleZoomSwitch();
 
       });
 
@@ -151,7 +154,7 @@
       <div class="col position-relative">
         <div class="form-check form-switch position-absolute end-0">
           <input class="form-check-input" type="checkbox" id="checkboxZoomLastMonth">
-          <label class="form-check-label" for="checkboxZoomLastMonth">zoom 36 jours</label>
+          <label class="form-check-label" for="checkboxZoomLastMonth" id="labelZoomLastMonth"></label>
         </div>
       </div>
     </div>
