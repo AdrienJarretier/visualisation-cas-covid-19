@@ -12,7 +12,7 @@ async function select_country(geoid, name, customChart) {
     for (let c of cases) {
         data.push(c.cases);
 
-        var options = { month: 'short', day: 'numeric', weekday:'short' };
+        var options = { month: 'short', day: 'numeric', weekday: 'short' };
 
         xTicksLabels.push((new Date(c.date)).toLocaleDateString('default', options));
     }

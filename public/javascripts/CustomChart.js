@@ -1,6 +1,6 @@
 'use strict';
 
-import { computeMovingAvg } from '/javascripts/statsCalculations.js';
+import { computeWeightedMovingAvg } from '/javascripts/statsCalculations.js';
 
 class CustomChart {
 
@@ -83,10 +83,10 @@ class CustomChart {
     }
 
     setMovingAvgWindowSize(value) {
-
+        value = parseInt(value);
         this.movingAvgWindowSize = value;
 
-        this.movingAvgConfig.data = computeMovingAvg(this.barChartConfig.data, value);
+        this.movingAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
 
         this._update();

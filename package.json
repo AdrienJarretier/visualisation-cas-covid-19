@@ -6,7 +6,9 @@
     "start": "node ./bin/wwwCovidCases"
   },
   "nodemonConfig": {
-    "ignore": ["bin/lastUpdateDateTime.json"]
+    "ignore": [
+      "bin/lastUpdateDateTime.json"
+    ]
   },
   "dependencies": {
     "better-sqlite3": "^6.0.1",
