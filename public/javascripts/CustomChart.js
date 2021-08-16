@@ -60,7 +60,7 @@ class CustomChart {
                         }
                     }
                 }
-                // ,maintainAspectRatio: false
+                , maintainAspectRatio: false
             }
         };
 
