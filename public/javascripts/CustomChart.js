@@ -1,6 +1,5 @@
 'use strict';
 
-import { computeMovingAvg } from '/javascripts/statsCalculations.js';
 import { computeWeightedMovingAvg } from '/javascripts/statsCalculations.js';
 
 class CustomChart {
@@ -15,7 +14,6 @@ class CustomChart {
 
         let barChartColor = '#4589ff';
         let movingAverageChartColor = '#bae6ff';
-        let movingWeightedAverageChartColor = '#fbdcac';
 
         this.barChartConfig = {
             type: 'bar',
