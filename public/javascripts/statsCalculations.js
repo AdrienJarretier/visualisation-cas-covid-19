@@ -50,11 +50,12 @@ function computeWeightedMovingAvg(rawValues, windowSize) {
      */
     function getWeights(windowSize) {
 
-        let weights = [Math.floor((windowSize + 2) / 2)]
+        let w = Math.floor((windowSize + 2) / 2);
 
-        for (let i = 1; i <= weights[0] - 1; ++i) {
-            weights.push(weights[i - 1] - 1);
-        }
+        let weights = [];
+
+        while (w > 0)
+            weights.push(w--);
 
         return weights;
 
