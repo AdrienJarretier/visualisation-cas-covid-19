@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/wwwCovidCases",
-    "startProd": "SET NODE_ENV=production&& node ./bin/wwwCovidCases"
+    "startProd": "SET NODE_ENV=production&& node ./bin/wwwCovidCases",
+    "startProdBash": "NODE_ENV=production node ./bin/wwwCovidCases"
   },
   "nodemonConfig": {
     "ignore": [
