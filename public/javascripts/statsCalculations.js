@@ -41,21 +41,28 @@ function computeMovingAvg(rawValues, windowSize) {
 }
 
 
-// returns the weights, tha indices reppresenting the distance from current point
-function getWeights(windowSize) {
+function computeWeightedMovingAvg(rawValues, windowSize) {
 
-    let weights = [Math.floor((windowSize + 2) / 2)]
+    /**
+     * Make an array of weights, the indices represent the distance from current point
+     * @param {number} windowSize Size of the "window", tha is the number of samples.
+     * @returns {number[]} the weights, the indices reppresenting the distance from current point
+     */
+    function getWeights(windowSize) {
 
-    for (let i = 1; i <= weights[0] - 1; i++) {
-        weights.push(weights[i - 1] - 1);
+        let weights = [Math.floor((windowSize + 2) / 2)]
+
+        for (let i = 1; i <= weights[0] - 1; ++i) {
+            weights.push(weights[i - 1] - 1);
+        }
+
+        return weights;
+
     }
 
-    return weights;
-
-}
-
-
-function computeWeightedMovingAvg(rawValues, windowSize) {
+    console.log('--------- testing getWeights ---------');
+    for (let i = 1; i < 6; ++i)
+        console.log(i, getWeights(i));
 
     const MAX_STOP = rawValues.length - 1;
 
