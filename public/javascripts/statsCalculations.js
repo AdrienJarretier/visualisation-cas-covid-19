@@ -61,15 +61,9 @@ function computeWeightedMovingAvg(rawValues, windowSize) {
 
     }
 
-    console.log('--------- testing getWeights ---------');
-    for (let i = 1; i < 6; ++i)
-        console.log(i, getWeights(i));
-
     const MAX_STOP = rawValues.length - 1;
 
     let movingAvgData = [];
-
-    let sum = 0;
 
     let AVG_START = 0;
     let AVG_STOP = Math.floor((windowSize - 1) / 2);
@@ -79,11 +73,11 @@ function computeWeightedMovingAvg(rawValues, windowSize) {
     function weighted_avg(start, stop, position) {
 
         let weights_sum = 0;
-        let w_j;
-        sum = 0;
+        let sum = 0;
 
         for (let j = start; j < stop + 1; ++j) {
-            w_j = weights[Math.abs(position - j)];
+
+            let w_j = weights[Math.abs(position - j)];
             sum += rawValues[j] * w_j;
             weights_sum += w_j;
         }
