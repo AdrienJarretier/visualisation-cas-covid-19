@@ -83,23 +83,42 @@ class CustomChart {
         this._chart.update();
     }
 
-    setMovingAvgWindowSize(value) {
+    setMovingAvgWindowSize(value, options) {
         value = parseInt(value);
+
+        options = options || {};
+        options = {
+            keepYAxis: options.keepYAxis || false
+        };
+
         this.movingAvgWindowSize = value;
 
         this.movingAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
 
+        console.log(options);
+        if (options.keepYAxis)
+            this.config.options.scales.y.max = this.scales.y.max;
+
         this._update();
+
+        if (options.keepYAxis)
+            this.config.options.scales.y.max = null;
     }
 
-    setData(data, xTicksLabels, movingAvgWindowSize) {
+    setData(data, xTicksLabels, movingAvgWindowSize, options) {
 
         movingAvgWindowSize = movingAvgWindowSize || this.movingAvgWindowSize;
 
+        console.log(options);
+        options = options || {};
+        options = {
+            keepYAxis: options.keepYAxis || false
+        };
+
         this.barChartConfig.data = data;
         this.data.labels = xTicksLabels;
-        this.setMovingAvgWindowSize(movingAvgWindowSize);
+        this.setMovingAvgWindowSize(movingAvgWindowSize, options);
     }
 
     setScaleLog(logBool) {
@@ -116,6 +135,15 @@ class CustomChart {
         this.zoom.days = n;
         this._update();
 
+    }
+
+    get scales() {
+        return this._chart.scales;
+    }
+
+    setMaxY(value) {
+        this.config.options.scales.y.max = value;
+        this._update();
     }
 }
 
