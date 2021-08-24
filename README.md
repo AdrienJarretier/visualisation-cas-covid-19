@@ -10,16 +10,16 @@ It interactively displays new reported contaminations, and allows to :
 
 + Switch between linear and log scales
 
-+ Zoom to focus on the last month
++ Zoom to focus on the last 7 weeks
 
-+ Overlay a rolling average to denoise and smooth the raw data, that is subjet to strong weekly variations. The window size of this weighted rolling average can be parametrized.
++ Overlay a rolling average to de-noise and smooth the raw data, that is subjet to strong weekly variations. The window size of this weighted rolling average can be set on either 14 or 30 days
 
 Here is a preview of the application (in French):
 
-![App screeshot](/public/images/App_preview.png)
+![App screenshot](/public/images/App_preview.png)
 
 The data is from :
-[European Centre for Disease Prevention and Control](https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide)
+[European Centre for Disease Prevention and Control](https://www.ecdc.europa.eu/en/publications-data/data-daily-new-cases-covid-19-eueea-country)
 
 
 **The app is not deployed online, but it will be soon.**
@@ -39,7 +39,7 @@ cd visualisation-cas-covid-19
 npm install
 node db/createDb.js
 ```
-
+<!-- 
 ### Adding telegram notifications
 
 If you intend to use the telegram bot feature to send daily notifications, you have to enable it in `localConfig.json`, AND you need a telegram bot to send notifications to clients [https://core.telegram.org/bots](https://core.telegram.org/bots).
@@ -48,7 +48,7 @@ If `telegram-notifications-bot-controler` is enabled in `localConfig.json` you n
 
 ```bash
 node telegram-notifications-bot-controler/createDb.js
-```
+``` -->
 
 ### Start the app
 
