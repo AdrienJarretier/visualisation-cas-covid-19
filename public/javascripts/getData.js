@@ -18,6 +18,7 @@ async function select_country(geoid, name, customChart, keepYAxis) {
     }
 
     customChart.setData(data, xTicksLabels, undefined, { keepYAxis: keepYAxis });
+    customChart.setMaxY(customChart.scales.y.max);
 }
 
 function disp_countries(countries, customChart) {

@@ -96,21 +96,13 @@ class CustomChart {
         this.movingAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
         this.movingAvgConfig.label = 'Moyenne glissante sur ' + value + ' jours';
 
-        console.log(options);
-        if (options.keepYAxis)
-            this.config.options.scales.y.max = this.scales.y.max;
-
         this._update();
-
-        if (options.keepYAxis)
-            this.config.options.scales.y.max = null;
     }
 
     setData(data, xTicksLabels, movingAvgWindowSize, options) {
 
         movingAvgWindowSize = movingAvgWindowSize || this.movingAvgWindowSize;
 
-        console.log(options);
         options = options || {};
         options = {
             keepYAxis: options.keepYAxis || false
