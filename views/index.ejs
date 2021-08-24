@@ -78,8 +78,9 @@
 
         appendWindowdSizeSelectorRadios(customChart);
 
-        const ZOOOM_DAYS = 30;
-        $('#labelZoomLastMonth').text('zoom ' + ZOOOM_DAYS + ' jours');
+        const ZOOM_WEEKS = 7;
+        const ZOOOM_DAYS = ZOOM_WEEKS*7;
+        $('#labelZoomLastMonth').text('zoom ' + ZOOM_WEEKS + ' semaines');
         function handleZoomSwitch() {
 
           if ($('#checkboxZoomLastMonth').prop('checked'))
