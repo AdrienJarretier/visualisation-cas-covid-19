@@ -83,14 +83,8 @@ class CustomChart {
         this._chart.update();
     }
 
-    setMovingAvgWindowSize(value, options) {
+    setMovingAvgWindowSize(value) {
         value = parseInt(value);
-
-        options = options || {};
-        options = {
-            keepYAxis: options.keepYAxis || false
-        };
-
         this.movingAvgWindowSize = value;
 
         this.movingAvgConfig.data = computeWeightedMovingAvg(this.barChartConfig.data, value);
@@ -99,18 +93,13 @@ class CustomChart {
         this._update();
     }
 
-    setData(data, xTicksLabels, movingAvgWindowSize, options) {
+    setData(data, xTicksLabels, movingAvgWindowSize) {
 
         movingAvgWindowSize = movingAvgWindowSize || this.movingAvgWindowSize;
 
-        options = options || {};
-        options = {
-            keepYAxis: options.keepYAxis || false
-        };
-
         this.barChartConfig.data = data;
         this.data.labels = xTicksLabels;
-        this.setMovingAvgWindowSize(movingAvgWindowSize, options);
+        this.setMovingAvgWindowSize(movingAvgWindowSize);
     }
 
     setScaleLog(logBool) {

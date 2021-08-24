@@ -1,6 +1,6 @@
 import { get } from './utils.js';
 
-async function select_country(geoid, name, customChart, keepYAxis) {
+async function select_country(geoid, name, customChart) {
 
     $('#countriesDropdown button').text(name);
 
@@ -17,7 +17,7 @@ async function select_country(geoid, name, customChart, keepYAxis) {
         xTicksLabels.push((new Date(c.date)).toLocaleDateString('default', options));
     }
 
-    customChart.setData(data, xTicksLabels, undefined, { keepYAxis: keepYAxis });
+    customChart.setData(data, xTicksLabels);
     customChart.setMaxY(customChart.scales.y.max);
 }
 
@@ -35,7 +35,7 @@ function disp_countries(countries, customChart) {
                 $('<a class="dropdown-item" href="#">')
                     .text(name)
                     .click(function () {
-                        select_country(geoid, name, customChart, true);
+                        select_country(geoid, name, customChart);
                     })
             );
 
