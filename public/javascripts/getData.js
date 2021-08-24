@@ -51,7 +51,7 @@ async function load_countries(customChart) {
     let first_geoid = Object.keys(countries)[0];
     let first_name = countries[first_geoid].name;
 
-    select_country(first_geoid, first_name, customChart);
+    await select_country(first_geoid, first_name, customChart);
 }
 
 export { load_countries };

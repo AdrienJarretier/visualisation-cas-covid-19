@@ -65,11 +65,9 @@
 
       $(async function () {
 
-
-
         let customChart = new CustomChart('#barchart');
 
-        load_countries(customChart);
+        await load_countries(customChart);
 
         $('#logCheckbox').change(function () {
 
