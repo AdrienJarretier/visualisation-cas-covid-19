@@ -117,6 +117,15 @@ class CustomChart {
         this._update();
 
     }
+
+    get scales() {
+        return this._chart.scales;
+    }
+
+    setMaxY(value) {
+        this.config.options.scales.y.max = value;
+        this._update();
+    }
 }
 
 export default CustomChart;

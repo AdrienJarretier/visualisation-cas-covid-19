@@ -18,6 +18,7 @@ async function select_country(geoid, name, customChart) {
     }
 
     customChart.setData(data, xTicksLabels);
+    customChart.setMaxY(customChart.scales.y.max);
 }
 
 function disp_countries(countries, customChart) {
@@ -34,7 +35,7 @@ function disp_countries(countries, customChart) {
                 $('<a class="dropdown-item" href="#">')
                     .text(name)
                     .click(function () {
-                        select_country(geoid, name, customChart)
+                        select_country(geoid, name, customChart);
                     })
             );
 
@@ -50,7 +51,7 @@ async function load_countries(customChart) {
     let first_geoid = Object.keys(countries)[0];
     let first_name = countries[first_geoid].name;
 
-    select_country(first_geoid, first_name, customChart);
+    await select_country(first_geoid, first_name, customChart);
 }
 
 export { load_countries };
