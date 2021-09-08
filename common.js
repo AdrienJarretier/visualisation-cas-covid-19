@@ -114,8 +114,7 @@ async function downloadData() {
 
     } catch (err) {
 
-        console.error("error when getting " + uri);
-        console.error(err);
+        throw 'common.js downloadData() : error when getting ' + uri;
 
     }
 

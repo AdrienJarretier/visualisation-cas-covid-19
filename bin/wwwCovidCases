@@ -198,16 +198,26 @@ async function downloadDataAndNotifyTelegramCliens(fireDate) {
 
 }
 
-function downloadDataIfLongTimeElapsed() {
+async function downloadDataIfLongTimeElapsed() {
 
   let timeSinceLastUpdateHours = getTimeSinceLastUpdateInHours();
   console.log('time since last update :', timeSinceLastUpdateHours, 'h');
 
-  if (timeSinceLastUpdateHours > common.serverConfig.minTimeBetweenDownloads.hours) {
-    downloadDataAndNotifyTelegramCliens("only once");
-  }
+  try {
 
-  saveLastUpdateDateTime();
+    if (timeSinceLastUpdateHours > common.serverConfig.minTimeBetweenDownloads.hours) {
+
+      await downloadDataAndNotifyTelegramCliens("only once");
+
+      saveLastUpdateDateTime();
+
+    }
+
+  } catch (e) {
+
+    console.error('downloadDataIfLongTimeElapsed() :', e);
+
+  }
 
 }
 
