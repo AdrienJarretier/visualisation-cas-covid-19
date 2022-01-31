@@ -72,6 +72,20 @@ async function db_get_all_by_prop(table, prop, value) {
 
 }
 
+async function db_get_recent_cases(geoid, months) {
+
+    rows_count = Math.round(months * 30.4375)
+    console.log(rows_count)
+    let sql = `
+    SELECT *
+    FROM cases
+    WHERE country = ?
+    ORDER by date DESC
+    LIMIT ?;`;
+    return await select_db(sql, [geoid, rows_count]);
+
+}
+
 async function db_get_all(table) {
 
     let sql = 'SELECT * FROM ' + table;
@@ -106,7 +120,7 @@ function compute_data_accumulation(end_date, props, full_rows) {
 
 async function get_data_by_geoid_for_recent_months(geoid) {
 
-    let geodata = await db_get_all_by_prop('cases', 'country', geoid);
+    let geodata = await db_get_recent_cases(geoid, 8);
 
     // -- compute accumulation
     geodata = geodata.map(day_data => {
