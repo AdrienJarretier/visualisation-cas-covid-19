@@ -104,7 +104,7 @@ function compute_data_accumulation(end_date, props, full_rows) {
 
 // ------------------ CASE DATA BY GEOID
 
-async function get_data_by_geoid(geoid) {
+async function get_data_by_geoid_for_recent_months(geoid) {
 
     let geodata = await db_get_all_by_prop('cases', 'country', geoid);
 
@@ -142,4 +142,4 @@ async function get_all_countries() {
 // ------------------------------------------------------ EXPORTS
 
 exports.get_all_countries = get_all_countries
-exports.get_data_by_geoid = get_data_by_geoid
+exports.get_data_by_geoid_for_recent_months = get_data_by_geoid_for_recent_months

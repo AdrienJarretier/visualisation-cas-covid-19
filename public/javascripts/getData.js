@@ -4,7 +4,7 @@ async function select_country(geoid, name, customChart) {
 
     $('#countriesDropdown button').text(name);
 
-    const cases = await get('api/cases/' + geoid);
+    const cases = await get('api/recentcases/' + geoid);
 
     let data = [];
     let xTicksLabels = [];
