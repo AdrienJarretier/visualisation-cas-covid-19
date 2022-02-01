@@ -13,8 +13,8 @@
                 "method": "get_all_countries",
                 "args": {}
             },
-            "/cases": {
-                "method": "get_data_by_geoid",
+            "/recentcases": {
+                "method": "get_data_by_geoid_for_recent_months",
                 "args": {
                     "geoid": "@url"
                 }
