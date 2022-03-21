@@ -20,5 +20,27 @@
                 }
             }
         }
+    },
+    "countries": {
+        "data": [
+            {
+                "geoid": "FRA",
+                "name": "la France",
+                "dataUrl": "https://www.data.gouv.fr/fr/datasets/r/f335f9ea-86e3-4ffa-9684-93c009d5e617"
+            },
+            {
+                "geoid": "DEU",
+                "name": "l'Allemagne",
+                "dataUrl": "https://www.esri.de/de-de/landingpages/corona-impact-2020/uebersicht"
+            },
+            {
+                "geoid": "ESP",
+                "name": "l'Espagne",
+                "dataUrl": ""
+            }
+        ],
+        "enabled": [
+            "FRA"
+        ]
     }
 }
