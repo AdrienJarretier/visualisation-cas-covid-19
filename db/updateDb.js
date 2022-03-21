@@ -12,7 +12,7 @@ function removeDate(db, date) {
 
 async function getByCountry(countryGeoId) {
 
-    let records = await common.downloadData();
+    let records = await common.downloadData(countryGeoId);
 
     return records[countryGeoId.toUpperCase()];
 

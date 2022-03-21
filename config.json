@@ -1,7 +1,6 @@
 {
-    "dataBaseUri": "https://opendata.ecdc.europa.eu/covid19/nationalcasedeath_eueea_daily_ei/csv/data.csv",
     "minTimeBetweenDownloads": {
-        "hours": 6
+        "hours": 0
     },
     "db": {
         "database": "db/covid19cases.db"
@@ -26,17 +25,17 @@
             {
                 "geoid": "FRA",
                 "name": "la France",
-                "dataUrl": "https://www.data.gouv.fr/fr/datasets/r/f335f9ea-86e3-4ffa-9684-93c009d5e617"
+                "dataUri": "https://www.data.gouv.fr/fr/datasets/r/f335f9ea-86e3-4ffa-9684-93c009d5e617"
             },
             {
                 "geoid": "DEU",
                 "name": "l'Allemagne",
-                "dataUrl": "https://www.esri.de/de-de/landingpages/corona-impact-2020/uebersicht"
+                "dataUri": "https://www.esri.de/de-de/landingpages/corona-impact-2020/uebersicht"
             },
             {
                 "geoid": "ESP",
                 "name": "l'Espagne",
-                "dataUrl": ""
+                "dataUri": ""
             }
         ],
         "enabled": [

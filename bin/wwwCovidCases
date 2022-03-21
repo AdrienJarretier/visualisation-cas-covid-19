@@ -147,26 +147,31 @@ async function downloadDataAndNotifyTelegramCliens(fireDate) {
 
   // --- data
 
-  let countries = {
-    'FRA': 'la France',
-    'DEU': "l'Allemagne"
-  }
-  let news_str_array = []
+  let countries = common.serverConfig.countries;
+  
+  let news_str_array = [];
   let news_map = {};
   let total = 0;
 
   // --- parsing
 
-  for (let geoid in countries) {
+  for (let country of countries['data']) {
 
-    let new_cases = await update_cases(geoid);
+    const geoid = country['geoid'];
 
-    news_map[geoid] = new_cases;
-    total += new_cases
+    if (countries['enabled'].includes(geoid)) {
 
-    if (new_cases > 0) {
-      let country_name = countries[geoid]
-      news_str_array.push(' - ' + new_cases + ' nouveaux contaminés pour ' + country_name)
+      console.log(geoid);
+
+      let new_cases = await update_cases(geoid);
+
+      news_map[geoid] = new_cases;
+      total += new_cases
+
+      if (new_cases > 0) {
+        let country_name = country["name"]
+        news_str_array.push(' - ' + new_cases + ' nouveaux contaminés pour ' + country_name)
+      }
     }
 
   }
@@ -211,6 +216,9 @@ async function downloadDataIfLongTimeElapsed() {
 
       saveLastUpdateDateTime();
 
+    }else
+    {
+      console.log('Last update too recent, skipping data download...');
     }
 
   } catch (e) {

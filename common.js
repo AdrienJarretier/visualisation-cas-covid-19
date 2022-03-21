@@ -59,42 +59,60 @@ function parse14DaysNotificationCases(records) {
     return parsedData
 }
 
-function parseDailyCases(records) {
+function parseDailyCases(records, countryGeoId) {
+
+    console.log(records);
 
     let parsedData = {};
 
-    for (let record of records) {
+    switch (countryGeoId) {
+        case 'FRA':
 
-        let year = record.year;
-        let month = parseInt(record.month) - 1;
-        let day = record.day;
+            for (let record of records) {
+                let year = record.year;
+                let month = parseInt(record.month) - 1;
+                let day = record.day;
+                let date = (new Date(Date.UTC(year, month, day))).toJSON();
+                let countryCode = record.countryterritoryCode.toUpperCase();
+                if (!(countryCode in parsedData)) {
+                    parsedData[countryCode] = {};
+                };
+                parsedData[countryCode][date] = {
+                    'cases': record.cases,
+                    'deaths': record.deaths,
+                    'country': record.countriesAndTerritories
+                }
+            }
+            
+            break;
+        default:
+            for (let record of records) {
+                let year = record.year;
+                let month = parseInt(record.month) - 1;
+                let day = record.day;
+                let date = (new Date(Date.UTC(year, month, day))).toJSON();
+                let countryCode = record.countryterritoryCode.toUpperCase();
+                if (!(countryCode in parsedData)) {
+                    parsedData[countryCode] = {};
+                };
+                parsedData[countryCode][date] = {
+                    'cases': record.cases,
+                    'deaths': record.deaths,
+                    'country': record.countriesAndTerritories
+                }
 
-        let date = (new Date(Date.UTC(year, month, day))).toJSON();
-
-        let countryCode = record.countryterritoryCode.toUpperCase();
-
-        if (!(countryCode in parsedData)) {
-
-            parsedData[countryCode] = {};
-        };
-
-        parsedData[countryCode][date] = {
-            'cases': record.cases,
-            'deaths': record.deaths,
-            'country': record.countriesAndTerritories
-        }
-
+            }
+            break;
     }
 
     return parsedData
 }
 
-async function downloadData() {
-
-    let uri = serverConfig.dataBaseUri;
-    // let uri = '127.0.0.1:' + common.serverConfig.port + '/testjson.json';
+async function downloadData(countryGeoId) {
 
     try {
+
+        const uri = serverConfig.countries.data.find(e => e.geoid == countryGeoId).dataUri;
 
         console.log('getting ' + uri);
 
@@ -103,14 +121,13 @@ async function downloadData() {
             .set("accept", "application/octet-stream")
             .buffer(true).disableTLSCerts();
 
-
-        const records = csvParse(res.body.toString(), {
+        const records = csvParse(res.text.toString(), {
             bom: true,
             columns: true,
             skip_empty_lines: true
         });
 
-        return parseDailyCases(records);
+        return parseDailyCases(records, countryGeoId);
 
     } catch (err) {
 
