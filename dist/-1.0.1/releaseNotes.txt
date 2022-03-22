@@ -1,0 +1,3 @@
+- parse france data
+- set new data sources in config.json and enabled FRA, download data for france, parsing is a WIP
+- added list of data per country in config.json
