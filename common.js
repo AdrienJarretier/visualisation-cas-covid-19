@@ -4,6 +4,7 @@ const csvParse = require('csv-parse/lib/sync');
 const fs = require('fs');
 const superagent = require('superagent');
 const local_config_loader = require('env-config-prompt');
+const { EOL } = require('os');
 
 const serverConfig = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 const local_config = local_config_loader(false, 'localConfig.json', 'localConfig_template.json', 'server config');
@@ -61,29 +62,35 @@ function parse14DaysNotificationCases(records) {
 
 function parseDailyCases(records, countryGeoId) {
 
-    console.log(records);
-
     let parsedData = {};
-
     switch (countryGeoId) {
         case 'FRA':
-
             for (let record of records) {
-                let year = record.year;
-                let month = parseInt(record.month) - 1;
-                let day = record.day;
+                const dateArray = record.date.split('-');
+                const year = dateArray[0];
+                const month = dateArray[1];
+                const day = dateArray[2];
                 let date = (new Date(Date.UTC(year, month, day))).toJSON();
-                let countryCode = record.countryterritoryCode.toUpperCase();
-                if (!(countryCode in parsedData)) {
-                    parsedData[countryCode] = {};
+
+                if (!(countryGeoId in parsedData)) {
+                    parsedData[countryGeoId] = {};
                 };
-                parsedData[countryCode][date] = {
-                    'cases': record.cases,
-                    'deaths': record.deaths,
-                    'country': record.countriesAndTerritories
+
+                parsedData[countryGeoId][date] = {
+                    'cases': record.conf_j1,
+                    'deaths': record.incid_dchosp,
+                    'country': serverConfig.countries.data.find(e => e.geoid == countryGeoId).name
                 }
+
+                // console.log(EOL);
+                // console.log(record);
+                // console.log('-');
+                // console.log(parsedData[countryGeoId][date]);
+                // console.log(EOL);
             }
-            
+
+
+
             break;
         default:
             for (let record of records) {
@@ -100,7 +107,6 @@ function parseDailyCases(records, countryGeoId) {
                     'deaths': record.deaths,
                     'country': record.countriesAndTerritories
                 }
-
             }
             break;
     }
@@ -110,9 +116,9 @@ function parseDailyCases(records, countryGeoId) {
 
 async function downloadData(countryGeoId) {
 
-    try {
+    const uri = serverConfig.countries.data.find(e => e.geoid == countryGeoId).dataUri;
 
-        const uri = serverConfig.countries.data.find(e => e.geoid == countryGeoId).dataUri;
+    try {
 
         console.log('getting ' + uri);
 
@@ -131,7 +137,7 @@ async function downloadData(countryGeoId) {
 
     } catch (err) {
 
-        throw 'common.js downloadData() : error when getting ' + uri;
+        throw 'common.js downloadData() : error when getting ' + uri + EOL + err.toString();
 
     }
 
