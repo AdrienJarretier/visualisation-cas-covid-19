@@ -68,7 +68,7 @@ function parseDailyCases(records, countryGeoId) {
             for (let record of records) {
                 const dateArray = record.date.split('-');
                 const year = dateArray[0];
-                const month = dateArray[1];
+                const month = dateArray[1] - 1;
                 const day = dateArray[2];
                 let date = (new Date(Date.UTC(year, month, day))).toJSON();
 
